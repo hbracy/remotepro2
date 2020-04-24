@@ -16,7 +16,7 @@ require('dotenv').config();
 const consoleDBLog = require('./tools').consoleDBLog;
 const coreDb = require('./database/core-db');
 
-// Library Global Variables
+// Library Variables
 const MongoClient = mongodb.MongoClient
 
 // My Global Variables
