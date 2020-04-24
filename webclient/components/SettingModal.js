@@ -26,12 +26,12 @@ function SettingModal(props) {
       }
       ).then(response => {
         console.log('LOGIN RESPONSE', response.data);
-        if (response.data.email) {
-          alert(response.data.email + ' signed into RemotePro');
+        if (response.data) {
+          alert('Sucessfully created org ' + response.data.org_name);
           // localStorage.setItem('jwtToken', response.data.authToken);
           // dispatch a user success;
         } else {
-          alert('failed to login');
+          alert(orgName + ' already exists');
         }
       }).catch(err => console.error(err));
 

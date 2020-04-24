@@ -10,7 +10,6 @@ import { TrademarkText } from '../components/StyledText';
 import Modal from '../modals/Modal.js'
 
 export default function SidebarListItem({style, onPress, text}) {
-  console.log("RENDERING")
   return(
       <TouchableOpacity style={[ styles.base2, ]}
         onPress={onPress}>

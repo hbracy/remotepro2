@@ -9,7 +9,6 @@
 
 
 export default function rootReducer(state = initialState, action) {
-  console.log('TOKEN', localStorage.getItem('jwtToken'));
     switch (action.type) {
       case 'TOGGLE_LOGINSIGNUP':
         console.log("DISPATCHING LOGINSIGNUP");

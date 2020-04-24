@@ -19,7 +19,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "find . -path ./node_modules -prune -o -name '*.test.js' | xargs nyc mocha -R nyan --exit"
+    "test": "find . -path ./node_modules -prune -o -name '*.test.js' | xargs nyc mocha -R spec --exit"
   },
   "author": "Harold Bracy Jr.",
   "license": "ISC"

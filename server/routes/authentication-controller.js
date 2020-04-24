@@ -1,7 +1,6 @@
 // const express = require('express');
 // const router = express.Router();
 const UserTrackerModule = require('../models/user-tracker')
-let sessionStoreAPI = require('../database/database-apis/session-store-api');
 
 let userTracker = new UserTrackerModule();
 

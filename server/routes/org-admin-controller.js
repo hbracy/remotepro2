@@ -1,5 +1,4 @@
 const OrgTrackerModule = require('../models/org-tracker')
-let sessionStoreAPI = require('../database/database-apis/session-store-api');
 
 let orgTracker = new OrgTrackerModule();
 
@@ -23,7 +22,7 @@ function orgAdminController(router) {
 
 
 
-
+    res.send(toSend);
 
   });
 

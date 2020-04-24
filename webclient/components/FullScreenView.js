@@ -23,7 +23,6 @@ import { fileInfo } from '../constants/test_constants/test-file-info.js'
 
 
 function FullScreenView(props) {
-  console.log('IS LOGGED IN', props.isLoggedIn);
   return (
     <View style={[props.style]}>
       <View style={[styles.absolutePosition, styles.fullWidth, styles.fullHeight, styles.noColor]}>

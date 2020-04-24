@@ -3,7 +3,7 @@ const assert = require('assert');
 let filesAPI = require('../database-apis/files-api.js');
 
 describe('Files Collection', function() {
-  const testEmail = 'fdsasd';
+  const testEmail = 'test3';
   const toCompareFileInsert = {
     fileURL: 'https://myfile1.com',
   }

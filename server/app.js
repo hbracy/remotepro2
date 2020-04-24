@@ -40,6 +40,7 @@ coreDb.connect().then((db) => {
   // require('./database/call-once/session-store-setup.js').setupSessionStore();
   // require('./database/call-once/session-store-setup.js').insertToSessionStore();
   // require('./database/call-once/users-setup.js').setupUsers();
+  // require('./database/call-once/orgs-setup.js').setupOrgs();
 
 
   // Start the server
