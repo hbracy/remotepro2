@@ -14,7 +14,7 @@ import HeaderButton from '../components/HeaderButton.js';
 
 function SettingModal(props) {
   const [orgOptionIsActivated, setOrgOptionIsActivated] = React.useState(false);
-  const [orgName, setOrgName] = React.useState('orgnam');
+  const [orgName, setOrgName] = React.useState('Remote Pro Org');
 
   function createNewOrg() {
       axios.post('http://localhost:3000/reserved/createNewOrg', {

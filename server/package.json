@@ -14,11 +14,12 @@
     "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.6",
-    "mongoose": "^5.9.9"
+    "mongoose": "^5.9.9",
+    "nyc": "^15.0.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "find . -path ./node_modules -prune -o -name '*.test.js' | xargs mocha -R spec --exit"
+    "test": "find . -path ./node_modules -prune -o -name '*.test.js' | xargs nyc mocha -R nyan --exit"
   },
   "author": "Harold Bracy Jr.",
   "license": "ISC"

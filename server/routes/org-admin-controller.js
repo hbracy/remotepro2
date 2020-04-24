@@ -1,10 +1,7 @@
-// const express = require('express');
-// const router = express.Router();
-const UserTrackerModule = require('../models/user-tracker')
+const OrgTrackerModule = require('../models/org-tracker')
 let sessionStoreAPI = require('../database/database-apis/session-store-api');
 
-let userTracker = new UserTrackerModule();
-
+let orgTracker = new OrgTrackerModule();
 
 function orgAdminController(router) {
 
@@ -15,8 +12,19 @@ function orgAdminController(router) {
     res.send(req.user);
   });
 
-  router.post('/reserved/createNewOrg', function (req, res) {
-    console.log('YEAHAHHHH')
+  router.post('/reserved/createNewOrg', async function (req, res) {
+    console.log('GETTING REQUEST FOR /reserved/createNewOrg');
+    // console.log(req.user);
+
+    let adminUser = req.user;
+    let orgName = req.body.orgName;
+
+    let toSend = await orgTracker.createNewOrg(adminUser, orgName);
+
+
+
+
+
   });
 
 
