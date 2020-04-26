@@ -12,12 +12,12 @@ import { TrademarkText } from '../components/StyledText';
 export default function HeaderButton({style, onPress, title }) {
 
   return(
-      <TouchableOpacity style={[style,
-                                styles.container1, 
+      <TouchableOpacity style={[styles.container1, 
                                 styles.curvedBase2Border, 
                                 styles.allAroundMargin, 
                                 styles.base2, 
-                                styles.centerCenter]}
+                                styles.centerCenter,
+                                style,]}
         onPress={onPress}>
         <TrademarkText>{title}</TrademarkText>
       </TouchableOpacity>

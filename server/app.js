@@ -11,7 +11,7 @@ const mongodb = require('mongodb');
 const cors = require('cors');
 require('dotenv').config();
 // const bodyParser = require('body-parser');
-
+const io = require('socket.io')(server);
 // Custom Imports
 const consoleDBLog = require('./tools').consoleDBLog;
 const coreDb = require('./database/core-db');
@@ -25,9 +25,10 @@ const hostname = 'localhost';
 const port = process.env.PORT || 3000;
 
 //Pre DB Setup
-// io.origins('*:*')
+io.origins('*:*')
 app.use(cors())
 app.options('*', cors());
+
 
 // Connect to the DB
 coreDb.connect().then((db) => {
@@ -43,14 +44,29 @@ coreDb.connect().then((db) => {
   // require('./database/call-once/orgs-setup.js').setupOrgs();
 
 
-  // Start the server
+  // Start the http server
   server.listen(port, hostname, () => {
     consoleDBLog('Server running at http://' + hostname + ':' + port + '/');
+  });
+
+  // Start the websocket server
+  io.on('connection', function (socket) {
+
+    // When the connection is opened
+    // clients[socket.id] = new Client(socket);
+    // Make appropriate logs
+    let ipAddress = socket.request.connection.remoteAddress;
+    consoleDBLog('NEW CONNECTION FROM', ipAddress);
+
+    socket.emit('serverConnection', "CONNECTED TO SERVER");
+
+    //Register socket listeners
+    require('./startup/register-socket-listeners')(socket);
+
   });
 }).catch((err) =>{
   console.log(err);
 });
-
 
 // +--------------------------------------------------------------------+
 // |                                 Basic Structure                    |
@@ -61,23 +77,31 @@ coreDb.connect().then((db) => {
 // |                                                    +----+-------+  |
 // |                                                         |          |
 // |                                                         |          |
-// |                                                         |          |
-// |                                                         |          |
-// |  +-------------+         +-------------+          +-----v------+   |
-// |  | database    |         |   models    |          |routes      |   |
-// |  |try/catching <--------->BusinessLogic<---------->Controller  +-------> response
-// |  |             |         |             |          |            |   |
-// |  +-------------+         +-------------+          +------------+   |
-// |                                                                    |
-// |                                                                    |
+// |                                                 +-------v-------+  |
+// |                                                 | Routes        |  |
+// |  +-------------+         +-------------+        |              +-------> response
+// |  | database    |         |   models    |        | +-----------+ |  |
+// |  |try/catching <--------->BusinessLogic<------- | |Protected  |    |
+// |  |             |         |             |        | |routes     | |  |
+// |  +-------------+         +------^------+        | +-----------+ |  |
+// |                                 |               +---------------+  |
+// |                                 |               +---------------+  |
+// |                                 |               | Listeners     |  |
+// |                                 |               | +-----------+ |  |
+// |                                 +---------------+ |Protected  | |  |
+// |                                                 | |listeners  | |  |
+// |                                                 | +-----------+ |  |
+// |                                                 +---------------+  |
+// |                                                        ^           |
+// |                                                        |           |
+// |                                                 +------v--------+  |
+// |                                                 | Socket      <--------> on/emit
+// |                                                 |               |  |
+// |                                                 +---------------+  |
 // +--------------------------------------------------------------------+
 
 
-
-
-
-
-
+// From asciiflow.com
 
 
 

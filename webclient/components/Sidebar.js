@@ -2,12 +2,13 @@ import * as React from 'react';
 import { View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
-import { toggleMessageModal } from '../constants/actions.js';
+import { toggleMessageModal, toggleAddContactModal } from '../constants/actions.js';
 
 import { styles } from '../styles/style.js'
 
 import Container from './Container.js';
 import SidebarListItem from './SidebarListItem.js';
+import HeaderButton from './HeaderButton.js';
 
 
 
@@ -30,25 +31,38 @@ function Sidebar(props) {
 
   function renderSideBarSeparators() {
     return (
-      <View style={{
-              height: 1,
-              width: "100%",
-              backgroundColor: styles.base2,
-            }}
+      <View
+        style={[styles.base2, {
+          height: 1,
+          width: "100%",
+        }]}      
       />
     );
   }
   console.log('SIDEBARISACTIVE STATE:', props.sidebarIsActive)
 
+
+
+  // fakeNames = props.data
+
   return(
     <View style={[props.style]}>
       {props.sidebarIsActive &&
-        <Container style={[styles.container1, styles.base2, ]}>
+        <Container style={[styles.container1, styles.base2, styles.flexColumn]}>
+          <Container style={[styles.container1,]}>
+            <HeaderButton  
+              onPress={() => props.dispatch(toggleAddContactModal())}         
+              title={"Add a Contact"}
+              style={[styles.container1, styles.flexColumn, styles.base3, styles.curvedBase3Border]}
+            />
+          </Container>
+          <Container style={[styles.container9]}>
           <FlatList style={[styles.container1]} 
             data={fakeNames}
             ItemSeparatorComponent={renderSideBarSeparators}
             renderItem={renderSideBarItems}
           />
+          </Container>
         </Container>
       }
     </View>
@@ -60,7 +74,7 @@ function Sidebar(props) {
 
 function mapStateToProps(state) {
   return {
-    sidebarIsActive: state.sidebarIsActive
+    sidebarIsActive: state.modalReducer.sidebarIsActive
   };
 }
 

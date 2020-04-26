@@ -56,12 +56,23 @@ function UserTracker() {
       consoleDBLog(user.email + ' BAD LOGIN');
       return toReturn
     }
-
   }
 
   this.authenticateUser = function authenticateUser(authToken) {
     let toReturn = validateToken(authToken);
     return toReturn;
+  }
+
+
+  this.searchTopFive = async function searchTopFive(userEmail, userSearch) {
+
+    let topFive = await usersAPI.getTopFiveWithName(userEmail, userSearch);
+    return topFive
+  }
+
+  this.addContactToUser = async function addContactToUser(contactEmail, userEmail) {
+    let userWithNewContact = await usersAPI.addContactToUser(contactEmail, userEmail);
+    return userWithNewContact;
 
 
   }

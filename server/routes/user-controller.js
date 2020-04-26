@@ -5,7 +5,7 @@ const UserTrackerModule = require('../models/user-tracker')
 let userTracker = new UserTrackerModule();
 
 
-function authenticationController(router) {
+function userController(router) {
 
   // const sessionsTracker = new SessionsTrackerModule();
 
@@ -47,10 +47,21 @@ function authenticationController(router) {
   });
 
 
+  router.post('/reserved/addContact', async function (req, res) {
+    console.log('GETTING REQUEST FOR /reserved/addContact');
+    let toSend = false;
+    if (req.body.contactEmail != req.user.email) {
+      toSend = await userTracker.addContactToUser(req.body.contactEmail, req.user.email);
+    }
+    // console.log('RESPONSE FROM /authenticate/signup:', toSend);
+    res.send(toSend)
+  });
+
+
 }
 
 module.exports = {
-  authenticationController: authenticationController,
+  userController: userController,
   userTracker: userTracker
 };
 

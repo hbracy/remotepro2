@@ -59,6 +59,91 @@ async function deleteUser(email) {
 
 }
 
+async function updateUserWithOrg(org, user) {
+  const db = await coreDb.getOrConnect();
+  const query = {'email': user.email};
+  // console.log(org);
+  const operation = {
+    $addToSet: {
+      "orgs": org.org_name
+    }
+  };
+
+  const options = {
+    returnOriginal: false, // Return the new record
+    projection: { // Only return the following
+      email: 1,
+      orgs: 1,
+    },
+  };
+
+  try {
+    let result = await db.collection('users').findOneAndUpdate(query, operation, options);
+    console.log(result.value);
+    return result.value;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
+async function getTopFiveWithName(userEmail, userSearch) {
+  const db = await coreDb.getOrConnect();
+  const query =  {$and: [{'email': { $regex: userSearch }}, {'email': {$ne: userEmail}}]}
+
+  const options = {
+    limit: 5,
+    projection: {
+      email: 1,
+      name: 1,
+    }
+  }
+
+  try {
+    let result = await db.collection('users').find(query, options).toArray();
+    return result;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+
+
+}
+
+
+async function addContactToUser(contactEmail, userEmail) {
+  const db = await coreDb.getOrConnect();
+  const query = {'email': userEmail};
+  // console.log(org);
+  const operation = {
+    $addToSet: {
+      "contacts": {
+        email: contactEmail,
+        name: 'Hard Coded Name',
+      }
+    }
+  };
+
+  const options = {
+    returnOriginal: false, // Return the new record
+    projection: { // Only return the following
+      email: 1,
+      orgs: 1,
+      contacts: 1,
+    },
+  };
+
+  try {
+    let result = await db.collection('users').findOneAndUpdate(query, operation, options);
+    console.log(result.value);
+    return result.value;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+
+
+}
 
 
 
@@ -67,6 +152,9 @@ module.exports = {
   insertUser: insertUser,
   deleteUser: deleteUser,
   verifyEmailAndPassword: verifyEmailAndPassword,
+  updateUserWithOrg: updateUserWithOrg,
+  getTopFiveWithName: getTopFiveWithName,
+  addContactToUser: addContactToUser
 }
 
 

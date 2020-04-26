@@ -17,6 +17,7 @@ import LoginModal from './LoginModal.js';
 import SettingModal from './SettingModal.js';
 import FolderItem from './FolderItem.js';
 import MessageModal from './MessageModal.js';
+import AddContactModal from './AddContactModal.js';
 
 // My Constants
 import { fileInfo } from '../constants/test_constants/test-file-info.js'
@@ -40,12 +41,12 @@ function FullScreenView(props) {
       </View>
       <Container pointerEvents="box-none"
         style={[styles.container1]} >
-        <Container
-          style={[styles.container1, styles.centerCenter]}>
+        <Container style={[styles.container1]}>
+          {props.addContactModalIsActive && <AddContactModal style={[styles.container1]} />}
         </Container>
-        <Container style={[styles.container1, styles.centerCenter]}>
+        <Container style={[styles.container1]}>
         </Container>
-        <Container style={[styles.container1, styles.centerCenter]} >
+        <Container style={[styles.container1]} >
         </Container>
         <Container style={[styles.container1]}>
           {!props.isLoggedIn && props.loginSignupModalIsActive && <LoginSignupModal style={[styles.container1, styles.relativePosition]} />}
@@ -60,11 +61,11 @@ function FullScreenView(props) {
           {props.messageModalIsActive &&
             <MessageModal contact={''} style={[styles.container1]} />}
         </Container>
-        <Container style={[styles.container1, styles.centerCenter]}>
+        <Container style={[styles.container1]}>
         </Container>
-        <Container style={[styles.container1, styles.centerCenter]} >
+        <Container style={[styles.container1]} >
         </Container>
-        <Container style={[styles.container1, styles.centerCenter]}>
+        <Container style={[styles.container1]}>
         </Container>
       </Container>
     </View>
@@ -73,12 +74,13 @@ function FullScreenView(props) {
 
 function mapStateToProps(state) {
   return {
-    loginSignupModalIsActive: state.loginSignupModalIsActive,
-    signupModalIsActive: state.signupModalIsActive,
-    loginModalIsActive: state.loginModalIsActive,
-    messageModalIsActive: state.messageModalIsActive,
-    isLoggedIn: state.isLoggedIn,
-    settingModalIsActive: state.settingModalIsActive,
+    loginSignupModalIsActive: state.modalReducer.loginSignupModalIsActive,
+    signupModalIsActive: state.modalReducer.signupModalIsActive,
+    loginModalIsActive: state.modalReducer.loginModalIsActive,
+    messageModalIsActive: state.modalReducer.messageModalIsActive,
+    isLoggedIn: state.modalReducer.isLoggedIn,
+    settingModalIsActive: state.modalReducer.settingModalIsActive,
+    addContactModalIsActive: state.modalReducer.addContactModalIsActive,
   };
 }
 

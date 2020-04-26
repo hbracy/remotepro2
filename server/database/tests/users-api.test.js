@@ -20,6 +20,24 @@ describe('User Collection', function() {
     });
   });
 
+  describe('#updateUserWithOrg()', () => {
+    it('should return the user with the new org info', async () => {
+
+      const toUpdateUser = {
+        email: testEmail
+      }
+
+      const newOrg = {
+        org_name: 'myTestOrgName'
+      }
+
+      const user = await usersAPI.updateUserWithOrg(newOrg, toUpdateUser);
+      // console.log(user);
+      assert.deepEqual(user.orgs[user.orgs.length - 1], newOrg.org_name);
+    });
+  });
+
+
   describe('#verifyEmailAndPassword()', () => {
     it('should return true upon inserting a deleting user from the database', async () => {
       const user = await usersAPI.verifyEmailAndPassword(testEmail, testPassword);
@@ -33,5 +51,8 @@ describe('User Collection', function() {
       assert.equal(deleteStatus, true);
     });
   });
+
+
+
 
 });

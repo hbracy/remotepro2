@@ -258,6 +258,12 @@ const styles = StyleSheet.create({
     borderColor: theme.base2,
     borderRadius: 10
   },
+
+  curvedBase3Border: {
+    borderWidth: 10,
+    borderColor: theme.base3,
+    borderRadius: 10
+  },
   curvedBase4Border: {
     borderWidth: 5,
     borderColor: theme.base4,

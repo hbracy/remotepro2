@@ -51,11 +51,11 @@ console.log(props.loginSignupModalIsActive);
 
 function mapStateToProps(state) {
   return {
-    loginSignupModalIsActive: state.loginSignupModalIsActive,
-    signupModalIsActive: state.signupModalIsActive,
-    loginModalIsActive: state.loginModalIsActive,
-    messageModalIsActive: state.messageModalIsActive,
-    sidebarIsActive: state.sidebarIsActive,
+    loginSignupModalIsActive: state.modalReducer.loginSignupModalIsActive,
+    signupModalIsActive: state.modalReducer.signupModalIsActive,
+    loginModalIsActive: state.modalReducer.loginModalIsActive,
+    messageModalIsActive: state.modalReducer.messageModalIsActive,
+    sidebarIsActive: state.modalReducer.sidebarIsActive,
 
   };
 }

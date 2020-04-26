@@ -9,8 +9,9 @@ export default function Container(props) {
   return (
       <View pointerEvents="box-none"
         style={[styles.container1,
+                styles.flexRow,
                 props.style,
-                styles.flexRow
+
               ]}>
         {props.children}
       </View>

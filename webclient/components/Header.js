@@ -39,9 +39,9 @@ function Header(props) {
 // Add this function:
 function mapStateToProps(state) {
   return {
-    loginSignupModalIsActive: state.loginSignupModalIsActive,
-    sidebarIsActive: state.sidebarIsActive,
-    isLoggedIn: state.isLoggedIn,
+    loginSignupModalIsActive: state.modalReducer.loginSignupModalIsActive,
+    sidebarIsActive: state.modalReducer.sidebarIsActive,
+    isLoggedIn: state.modalReducer.isLoggedIn,
   };
 }
 

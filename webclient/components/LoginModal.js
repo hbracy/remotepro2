@@ -3,7 +3,7 @@ import { View, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import { toggleLoginSignup, toggleLogin, toggleSignup, toggleIsLoggedIn, toggleSettingsModal } from '../constants/actions.js';
+import { toggleLoginSignup, toggleLogin, toggleSignup, toggleIsLoggedIn, toggleSettingsModal, connectToSocket } from '../constants/actions.js';
 
 import { styles } from '../styles/style.js'
 
@@ -30,6 +30,7 @@ function LoginModal(props) {
           localStorage.setItem('jwtToken', response.data.authToken);          
           props.dispatch(toggleIsLoggedIn());
           props.dispatch(toggleSettingsModal());
+          props.dispatch(connectToSocket())
 
          } else {
           alert(loginInfo.email + ' failed to login');
@@ -64,7 +65,7 @@ function LoginModal(props) {
         <Container style={[styles.container1]}>
           <HeaderButton onPress={sendLoginInfo}
             title={"Login"} 
-            style={[styles.container1, styles.base1]}>
+            style={[styles.container1]}>
           </HeaderButton>
         </Container>
         </Modal>
@@ -76,7 +77,7 @@ function LoginModal(props) {
 
 function mapStateToProps(state) {
   return {
-    loginModalIsActive: state.loginModalIsActive,
+    loginModalIsActive: state.modalReducer.loginModalIsActive,
   };
 }
 

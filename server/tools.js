@@ -41,7 +41,7 @@ function validateToken(authToken) {
   try {
     toReturn = jwt.verify(authToken, process.env.JWT_SECRET);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
   return toReturn;
 }

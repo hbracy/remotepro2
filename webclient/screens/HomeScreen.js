@@ -5,12 +5,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Entypo } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 
-
 // import { homestyles } from '../styles/homestyle.js'
 import { styles } from '../styles/style.js'
 
 import { TrademarkText } from '../components/StyledText';
 
+import { connectToSocket } from '../constants/actions.js';
 
 
 import Modal from '../modals/Modal.js';
@@ -45,6 +45,10 @@ function HomeScreen(props) {
   const welcomeImageWidth = 2000
   const aspectRatio = 3 / 2;
 
+  React.useEffect(() => {
+    props.dispatch(connectToSocket());
+  }, []);
+
   return (
     <View style={[styles.container1]}>
       <Container style={[styles.container1,styles.base3,]}>
@@ -76,11 +80,12 @@ function HomeScreen(props) {
 
 function mapStateToProps(state) {
   return {
-    loginSignupModalIsActive: state.loginSignupModalIsActive,
-    signupModalIsActive: state.signupModalIsActive,
-    loginModalIsActive: state.loginModalIsActive,
-    messageModalIsActive: state.messageModalIsActive,
-    sidebarIsActive: state.sidebarIsActive,
+    loginSignupModalIsActive: state.modalReducer.loginSignupModalIsActive,
+    signupModalIsActive: state.modalReducer.signupModalIsActive,
+    loginModalIsActive: state.modalReducer.loginModalIsActive,
+    messageModalIsActive: state.modalReducer.messageModalIsActive,
+    sidebarIsActive: state.modalReducer.sidebarIsActive,
+    socketConnection : state.socketReducer.socketConnection,
 
   };
 }

@@ -14,28 +14,7 @@ import HeaderButton from '../components/HeaderButton.js';
 
 function SettingModal(props) {
   const [orgOptionIsActivated, setOrgOptionIsActivated] = React.useState(false);
-  const [orgName, setOrgName] = React.useState('Remote Pro Org');
-
-  function createNewOrg() {
-      axios.post('http://localhost:3000/reserved/createNewOrg', {
-        orgName: orgName,
-      }, {
-        headers: {
-          authorization: 'Bearer ' + localStorage.getItem('jwtToken')
-        }
-      }
-      ).then(response => {
-        console.log('LOGIN RESPONSE', response.data);
-        if (response.data) {
-          alert('Sucessfully created org ' + response.data.org_name);
-          // localStorage.setItem('jwtToken', response.data.authToken);
-          // dispatch a user success;
-        } else {
-          alert(orgName + ' already exists');
-        }
-      }).catch(err => console.error(err));
-
-  }
+  // const [orgName, setOrgName] = React.useState('');
 
 
   return (
@@ -45,35 +24,91 @@ function SettingModal(props) {
               isModalityEnabled={true}
               default={props.settingModalIsActive}
               style={[styles.container1, styles.base3]}>
-        <Container style={[styles.container1, styles.allAroundMargin]}>
-          <HeaderButton
-            title={"Welcome "} 
-            style={[styles.container1, styles.base1]}>
-          </HeaderButton>
-        </Container>
 
-        <Container style={[styles.container1, styles.allAroundMargin]}>
-          <HeaderButton onPress={() => setOrgOptionIsActivated(true)}
-            title={"Create a new Org"} 
-            style={[styles.container1, styles.base1]}>
-          </HeaderButton>
-        </Container>
-        <Container style={[styles.container1]}>
-          <HeaderButton onPress={createNewOrg}
-            title={"YEAH"} 
-            style={[styles.container1, styles.base1]}>
-          </HeaderButton>
-        </Container>
+        {!orgOptionIsActivated && <DefaultModal />}
+        {orgOptionIsActivated && <OrgModal /> }
         </Modal>
       </View>
     </View>
-  
   );
+
+  function DefaultModal(props) {
+    return (
+      <Container style={[styles.container1, styles.flexColumn]}>
+      <Container style={[styles.container1]}>
+        <HeaderButton
+          title={"Personal Settings"} 
+          style={[styles.container1]}>
+        </HeaderButton>
+      </Container>
+      <Container style={[styles.container1]}>
+        <HeaderButton onPress={() => setOrgOptionIsActivated(true)}
+          title={"Create a new Org"} 
+          style={[styles.container1]}>
+        </HeaderButton>
+      </Container>
+      <Container style={[styles.container1]}>
+        <HeaderButton onPress={() => console.log('logout')}
+          title={"Logout"} 
+          style={[styles.container1]}>
+        </HeaderButton>
+      </Container>
+      </Container>
+    );
+  }
+
+  function OrgModal(props) {
+
+    const [orgName, setOrgName] = React.useState('');
+
+    function createNewOrg() {
+        axios.post('http://localhost:3000/reserved/createNewOrg', {
+          orgName: orgName,
+        }, {
+          headers: {
+            authorization: 'Bearer ' + localStorage.getItem('jwtToken')
+          }
+        }
+        ).then(response => {
+          console.log('LOGIN RESPONSE', response.data);
+          if (response.data == 'Please login again') {
+            localStorage.removeItem('jwtToken'); // move this condition closer to root
+            props.dispatch(toggleLogin());
+          } else if (response.data) {
+            alert('Sucessfully created org ' + response.data.org_name);
+            // localStorage.setItem('jwtToken', response.data.authToken);
+            // dispatch a user success;
+          } else {
+            alert(orgName + ' already exists');
+          }
+        }).catch(err => console.error(err));
+
+    }
+
+    return (
+      <Container style={[props.style, styles.container1, styles.flexColumn]}>
+        <Container style={[styles.container1, styles.allAroundMargin]}>
+          <TextInput 
+            style={[styles.fullHeight]}
+            onChangeText={text => setOrgName(text)}
+            placeholder="Name your organization"
+          />
+        </Container>
+      <Container style={[styles.container1]}>
+        <HeaderButton onPress={createNewOrg}
+          title={"Create"} 
+          style={[styles.container1]}>
+        </HeaderButton>
+      </Container>
+      </Container>
+    );
+  }
+
 }
 
 function mapStateToProps(state) {
   return {
-    settingModalIsActive: state.settingModalIsActive,
+    settingModalIsActive: state.modalReducer.settingModalIsActive,
   };
 }
 

@@ -3,7 +3,7 @@ import { View, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import { toggleSignup, toggleIsLoggedIn } from '../constants/actions.js';
+import { toggleSignup, toggleIsLoggedIn, connectToSocket } from '../constants/actions.js';
 
 import { styles } from '../styles/style.js'
 
@@ -29,6 +29,8 @@ function SignupModal(props) {
           localStorage.setItem('jwtToken', response.data.authToken);
           // dispatch a user success; s
           props.dispatch(toggleIsLoggedIn());
+          props.dispatch(connectToSocket())
+
         } else {
           alert(response.data.email + ' is already a username, please use a different one');
         }
@@ -89,7 +91,7 @@ function SignupModal(props) {
 
 function mapStateToProps(state) {
   return {
-    signupModalIsActive: state.signupModalIsActive,
+    signupModalIsActive: state.modalReducer.signupModalIsActive,
   };
 }
 

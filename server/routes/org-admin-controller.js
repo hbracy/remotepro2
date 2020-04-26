@@ -20,10 +20,7 @@ function orgAdminController(router) {
 
     let toSend = await orgTracker.createNewOrg(adminUser, orgName);
 
-
-
     res.send(toSend);
-
   });
 
 

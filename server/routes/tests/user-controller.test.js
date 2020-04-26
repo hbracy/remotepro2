@@ -4,7 +4,7 @@ const axios = require('axios');
 
 // const coreDb = require('../core-db');
 
-describe('Authentication Controller', function() {
+describe('User Controller', function() {
   const testEmail = 'test6';
   const testPassword = 'test6';
 

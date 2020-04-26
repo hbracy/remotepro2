@@ -28,7 +28,7 @@ function LoginSignupModal(props) {
               }
             }
             title={"Settings"} 
-            style={[styles.container1, styles.allAroundMargin, styles.base1]}>
+            style={[styles.container1, styles.allAroundMargin]}>
           </HeaderButton>
         </Container>
         <Container style={[styles.container1, styles.noColor]}>
@@ -38,7 +38,7 @@ function LoginSignupModal(props) {
               }
             }
             title={"Signup"} 
-            style={[styles.container1, styles.allAroundMargin, styles.base1]}>
+            style={[styles.container1, styles.allAroundMargin]}>
           </HeaderButton>
         </Container>
         <Container style={[styles.container1, styles.noColor]}>
@@ -47,7 +47,7 @@ function LoginSignupModal(props) {
                 props.dispatch(toggleLogin());
             }}
             title={"Login"} 
-            style={[styles.container1, styles.allAroundMargin, styles.base1]}>
+            style={[styles.container1, styles.allAroundMargin]}>
           </HeaderButton>
         </Container>
         </Modal>
@@ -61,9 +61,9 @@ function LoginSignupModal(props) {
 
 function mapStateToProps(state) {
   return {
-    loginSignupModalIsActive: state.loginSignupModalIsActive,
-    loginModalIsActive: state.loginModalIsActive,
-    signupModalIsActive: state.signupModalIsActive,
+    loginSignupModalIsActive: state.modalReducer.loginSignupModalIsActive,
+    loginModalIsActive: state.modalReducer.loginModalIsActive,
+    signupModalIsActive: state.modalReducer.signupModalIsActive,
   };
 }
 

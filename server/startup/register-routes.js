@@ -1,11 +1,11 @@
 const express = require("express");
-// let session = require('express-session');
-
+const graphqlHTTP = require('express-graphql');
+const { buildSchema } = require('graphql');
 let router = express.Router();
 
 
 let indexController = require("../routes/index");
-let authenticationController = require("../routes/authentication-controller").authenticationController;
+let userController = require("../routes/user-controller").userController;
 let orgAdminController = require("../routes/org-admin-controller").orgAdminController;
 
 const tools = require('../tools');
@@ -15,11 +15,16 @@ module.exports = function(app) {
   app.use(express.json());
   app.use(router);
   indexController(router);
-  authenticationController(router);
+
+
+  // Construct a schema, using GraphQL schema language
+
+
 
   // Protect all reserved routes
   router.use('/reserved', function(req, res, next) {
     // check header or url parameters or post parameters for token
+    console.log(req.headers)
     let token = req.headers.authorization;
     if (!token) return; //if no token, continue
 
@@ -28,14 +33,17 @@ module.exports = function(app) {
     const validUser = tools.validateToken(token);
 
     if (validUser) {
-      // console.log('VALID TOKEN')
+      console.log('VALID TOKEN')
       req.user = validUser;
       next();
     } else {
-      // console.log('NOT VALID TOKEN')
+      console.log('NOT VALID TOKEN')
       res.send(false);
     }
   });
+
+  userController(router);
+
 
   orgAdminController(router);
 

@@ -11,9 +11,9 @@ import Modal from '../modals/Modal.js'
 
 export default function SidebarListItem({style, onPress, text}) {
   return(
-      <TouchableOpacity style={[ styles.base2, ]}
+      <TouchableOpacity style={[ styles.base3, ]}
         onPress={onPress}>
-        <View style={[styles.base2 ]}>
+        <View style={[styles.base3 ]}>
           <TrademarkText style={[styles.mediumFont, ]}>{text}</TrademarkText>
         </View>
       </TouchableOpacity>
