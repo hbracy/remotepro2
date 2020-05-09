@@ -1,7 +1,4 @@
-// const express = require('express');
-// const router = express.Router();
 const UserTrackerModule = require('../models/user-tracker')
-
 let userTracker = new UserTrackerModule();
 
 
@@ -46,7 +43,6 @@ function userController(router) {
     res.send(toSend)
   });
 
-
   router.post('/reserved/addContact', async function (req, res) {
     console.log('GETTING REQUEST FOR /reserved/addContact');
     let toSend = false;
@@ -57,6 +53,14 @@ function userController(router) {
     res.send(toSend)
   });
 
+
+  router.get('/reserved/getContacts', async function (req, res) {
+    console.log('GETTING REQUEST FOR /reserved/getContacts');
+
+    let toSend = await userTracker.getContacts(req.user.email);
+    console.log('RESPONSE FROM /reserved/getContacts:', toSend);
+    res.send(toSend)
+  });
 
 }
 

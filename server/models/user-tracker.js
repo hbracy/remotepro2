@@ -1,4 +1,6 @@
 let usersAPI = require('../database/database-apis/users-api');
+let messagesAPI = require('../database/database-apis/messages-api');
+
 // let sessionStoreAPI = require('../database/database-apis/session-store-api');
 
 const consoleDBLog = require('../tools').consoleDBLog;
@@ -72,9 +74,17 @@ function UserTracker() {
 
   this.addContactToUser = async function addContactToUser(contactEmail, userEmail) {
     let userWithNewContact = await usersAPI.addContactToUser(contactEmail, userEmail);
+    let newConversation = await messagesAPI.addConversation(userEmail, contactEmail);
+    userWithNewContact.conversationId = newConversation._id;
     return userWithNewContact;
 
 
+  }
+
+  this.getContacts = async function getContacts(userEmail) {
+    let contacts = await usersAPI.getContacts(userEmail);
+
+    return contacts
   }
 
 

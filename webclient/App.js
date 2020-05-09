@@ -7,13 +7,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HeaderNavigator from './navigation/HeaderNavigator'
 import useLinking from './navigation/useLinking';
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux'
+import thunk from 'redux-thunk';
+
 import Constants from './tools/Constants';
 import rootReducer from './reducers/RootReducer.js'
 
 
 import { styles } from './styles/style.js'
+
+const middleware = applyMiddleware(thunk);
+export const store = createStore(rootReducer, middleware);
 
 
 export default function App(props) {
@@ -25,8 +30,6 @@ export default function App(props) {
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
 
-
-  const store = createStore(rootReducer);
 
 
   const HEADER_ROUTE = 'home'
@@ -60,7 +63,7 @@ export default function App(props) {
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
   } else {
-    console.log('RENDERING');
+    // console.log('RENDERING');
 
     return (
       <Provider store={store} >
@@ -73,8 +76,7 @@ export default function App(props) {
       </Provider>
     );
   }
-}
-
+} 
 
         // <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
         //   <Stack.Navigator 

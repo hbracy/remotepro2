@@ -117,10 +117,13 @@ async function addContactToUser(contactEmail, userEmail) {
   // console.log(org);
   const operation = {
     $addToSet: {
-      "contacts": {
+      'contacts': {
         email: contactEmail,
         name: 'Hard Coded Name',
       }
+      // 'conversations': {
+      //   conversation_id: conversation_id,
+      // }
     }
   };
 
@@ -141,6 +144,31 @@ async function addContactToUser(contactEmail, userEmail) {
     console.error(err);
     return false;
   }
+}
+
+async function getContacts(userEmail) {
+  const db = await coreDb.getOrConnect();
+
+  const query = {'email': userEmail};
+
+  const options = {
+    projection: { // Only return the following
+      email: 1,
+      contacts: 1,
+    },
+  };
+
+  try {
+    let result = await db.collection('users').findOne(query, options);
+    // console.log(result);
+    return result.contacts;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+
+
+
 
 
 }
@@ -154,7 +182,8 @@ module.exports = {
   verifyEmailAndPassword: verifyEmailAndPassword,
   updateUserWithOrg: updateUserWithOrg,
   getTopFiveWithName: getTopFiveWithName,
-  addContactToUser: addContactToUser
+  addContactToUser: addContactToUser,
+  getContacts: getContacts,
 }
 
 

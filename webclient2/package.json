@@ -1,0 +1,76 @@
+{
+  "name": "webclient2",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/plugin-syntax-class-properties": "^7.8.3",
+    "@react-native-community/hooks": "^2.4.8",
+    "@react-native-community/masked-view": "^0.1.7",
+    "@react-navigation/bottom-tabs": "^5.0.0",
+    "@react-navigation/drawer": "^5.4.0",
+    "@react-navigation/material-top-tabs": "^5.1.7",
+    "@react-navigation/native": "5.1.1",
+    "@react-navigation/stack": "^5.0.0",
+    "@react-navigation/web": "~1.0.0-alpha.9",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "@tinymce/tinymce-react": "^3.6.0",
+    "axios": "^0.19.2",
+    "e": "0.0.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
+    "react-native-autocomplete-input": "^4.1.0",
+    "react-native-autogrow-textinput": "^5.4.0",
+    "react-native-cn-richtext-editor": "^1.0.42",
+    "react-native-elements": "^1.2.7",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-modal": "^11.5.6",
+    "react-native-popup-menu": "^0.15.7",
+    "react-native-reanimated": "^1.7.1",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.4.0",
+    "react-native-syntax-highlighter": "^2.1.0",
+    "react-native-tab-view": "^2.13.0",
+    "react-native-web": "^0.11.7",
+    "react-native-webview-quilljs": "^2.0.0",
+    "react-native-zss-rich-text-editor": "^1.1.0",
+    "react-navigation": "^4.3.7",
+    "react-onclickoutside": "^6.9.0",
+    "react-redux": "^7.2.0",
+    "react-rte": "^0.16.1",
+    "react-scripts": "3.4.1",
+    "react-select-search": "^1.0.2",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "suneditor-react": "^2.10.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "test": "jest --watchAll"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@types/jest": "^25.2.1"
+  }
+}

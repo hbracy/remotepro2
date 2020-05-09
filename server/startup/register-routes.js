@@ -7,10 +7,11 @@ let router = express.Router();
 let indexController = require("../routes/index");
 let userController = require("../routes/user-controller").userController;
 let orgAdminController = require("../routes/org-admin-controller").orgAdminController;
+let storageController = require("../routes/storage-controller.js").storageController;
 
 const tools = require('../tools');
 
-module.exports = function(app) {
+module.exports = function(app, storage) {
 
   app.use(express.json());
   app.use(router);
@@ -43,6 +44,9 @@ module.exports = function(app) {
   });
 
   userController(router);
+
+  // give access to public files
+  storageController(router, storage);
 
 
   orgAdminController(router);
