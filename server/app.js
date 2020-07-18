@@ -52,6 +52,7 @@ coreDb.connect().then((db) => {
   // require('./database/call-once/users-setup.js').setupUsers();
   // require('./database/call-once/orgs-setup.js').setupOrgs();
   // require('./database/call-once/storage-setup.js').setupStorage(storage);
+  // require('./database/call-once/work-items-setup.js').setupWorkItems();
 
   // Start the http server
   server.listen(port, hostname, () => {

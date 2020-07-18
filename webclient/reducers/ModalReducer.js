@@ -11,7 +11,9 @@ const initialState = {
   isLoggedIn: localStorage.getItem('jwtToken'),
   settingModalIsActive: false,
   addContactModalIsActive: false,
-  isSmallWindow: win.width < 800
+  isSmallWindow: win.width < 800,
+  goToWork: false,
+  goToFiles: true
 }
 
 
@@ -73,6 +75,13 @@ export default function modalReducer(state = initialState, action) {
         return {
           ...state,
           addContactModalIsActive: !state.addContactModalIsActive
+        }
+      case 'GO_TO_WORK':
+        console.log("DISPATCHING GO_TO_WORK TO", true);
+        return {
+          ...state,
+          goToWork: true,
+          goToFiles: false,
         }
       default:
         return state;

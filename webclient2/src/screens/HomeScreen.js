@@ -52,7 +52,7 @@ function HomeScreen(props) {
   React.useEffect(() => {
     props.dispatch(connectToSocket());
   }, []);
-
+  console.log('IS LOGGED IN?', props.isLoggedIn)
   return (
     <View style={[styles.container1]}>
       <Container style={[styles.container1,styles.base3,]}>
@@ -67,12 +67,24 @@ function HomeScreen(props) {
             <MobileScreen style={[styles.container1,]} />
           }
           {
-            !isSmallWindow &&
+            !isSmallWindow && props.isLoggedIn && 
             <View style={[styles.container1, styles.flexRow]}>
               <Sidebar style={[styles.container1]} />
               <FullScreenView isSmallWindow={isSmallWindow}
                 style={[styles.container5]} />
             </View>
+          }
+          {
+            !props.isLoggedIn &&
+            <View>
+              <Text>
+              yo
+              </Text>
+
+            </View>
+
+
+
           }
         </ImageBackground>
       </Container>
@@ -89,6 +101,7 @@ function mapStateToProps(state) {
     loginModalIsActive: state.modalReducer.loginModalIsActive,
     messageModalIsActive: state.modalReducer.messageModalIsActive,
     sidebarIsActive: state.modalReducer.sidebarIsActive,
+    isLoggedIn: state.modalReducer.isLoggedIn,
     socketConnection : state.socketReducer.socketConnection,
 
   };

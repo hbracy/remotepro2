@@ -10,7 +10,7 @@ import { styles } from '../styles/style.js'
 
 import { TrademarkText } from '../components/StyledText';
 
-import { connectToSocket } from '../constants/actions.js';
+import { connectToSocket, goToWork } from '../constants/actions.js';
 
 
 import Modal from '../modals/Modal.js';
@@ -22,7 +22,6 @@ import HeaderButton from '../components/HeaderButton.js';
 import Sidebar from '../components/Sidebar.js';
 import Container from '../components/Container.js';
 import MobileScreen from '../components/MobileScreen.js';
-
 
 let loggedIn = false;
 
@@ -42,8 +41,6 @@ const backgroundImageStyle = [{
   'width': '100%',
   'resizeMode': 'cover'
 }]
-
-
 
 function HomeScreen(props) {
   const welcomeImageWidth = 2000
@@ -71,12 +68,21 @@ function HomeScreen(props) {
             <View style={[styles.container1, styles.flexRow]}>
               <Sidebar style={[styles.container1]} />
               <FullScreenView isSmallWindow={isSmallWindow}
-                style={[styles.container5]} />
+              style={[styles.container5]} />
+              
             </View>
           }
         </ImageBackground>
       </Container>
       <Container style={[styles.container1, styles.base2]}>
+        <HeaderButton title="Work"
+          //Turn off everything if isSmallWindow
+          onPress={() => props.dispatch(goToWork())}
+          style={[styles.container1, styles.curvedBase1Border, styles.base1]}
+          textColor={styles.base2Text}
+        />
+        <Container style={[styles.container1, styles.allAroundMargin, styles.curvedBase1Border, styles.base1, styles.flexRow]} />
+        <Container style={[styles.container1, styles.allAroundMargin, styles.curvedBase1Border, styles.base1, styles.flexRow]} />
       </Container>
     </View>
   );
@@ -89,8 +95,8 @@ function mapStateToProps(state) {
     loginModalIsActive: state.modalReducer.loginModalIsActive,
     messageModalIsActive: state.modalReducer.messageModalIsActive,
     sidebarIsActive: state.modalReducer.sidebarIsActive,
+    isLoggedIn: state.modalReducer.isLoggedIn,
     socketConnection : state.socketReducer.socketConnection,
-
   };
 }
 

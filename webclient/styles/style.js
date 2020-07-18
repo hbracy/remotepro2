@@ -18,7 +18,9 @@ const theme = {
   base2: '#323232', // background
   base4: '#000000', // brand
   // base5: '#bbbbb9'
-  base5: '#d1ccc7'
+  base5: '#d1ccc7',
+  white: '#ffffff',
+  darkRed: '#66154b'
 }
 
 
@@ -45,6 +47,8 @@ const styles = StyleSheet.create({
     flexShrink: 0
 
   },
+
+
 
   container3: {
     flex: 3,
@@ -122,6 +126,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
 
+  alwaysBiggerThanChildren: {
+    alignSelf: 'flex-start'
+  },
+
   centered: {
     alignItems: 'center'
   },
@@ -149,6 +157,12 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height
   },
 
+  eightyPercentDeviceWidth: {
+    width: Dimensions.get('window').width * 0.8
+  },
+  eightyPercentDeviceHeight: {
+    height: Dimensions.get('window').height * 0.8
+  },
   base1: {
     backgroundColor: theme.base1
   },
@@ -166,6 +180,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.base5
   },
 
+  darkRed: {
+    backgroundColor: theme.darkRed
+  },
+
+
   noColor: {
     backgroundColor: 'transparent'
   },
@@ -174,8 +193,24 @@ const styles = StyleSheet.create({
     color: 'white'
   },
 
+  redText: {
+    color: '#9f2278'
+  },
+  darkRedText: {
+    color: '#66154b'
+  },
+
   base1Text: {
     color: theme.base1
+  },
+
+  base2Text: {
+    color: theme.base2
+  },
+
+
+  base4Text: {
+    color: theme.base4
   },
 
   verticalCenter: {
@@ -187,7 +222,7 @@ const styles = StyleSheet.create({
   },
 
   largeFont: {
-    fontSize: 50
+    fontSize: 30
   },
  mediumFont: {
     fontSize: 20
@@ -195,6 +230,10 @@ const styles = StyleSheet.create({
 
   smallFont: {
     fontSize: 10
+  },
+
+  boldText: {
+    fontWeight: 'bold'
   },
 
   textAlignRight: {
@@ -238,7 +277,9 @@ const styles = StyleSheet.create({
     height: '10%'
   },
 
-
+  seventyPercentHeight: {
+    height: '70%'
+  },
   eightyPercentWidth: {
     width: '80%'
   },
@@ -265,10 +306,23 @@ const styles = StyleSheet.create({
     height: deviceHeight * 0.9
   },
 
+  transparentBorder: {
+    borderWidth: 5,
+    borderColor: 'transparent',
+    borderRadius: 10
+
+  },
+
   curvedBase1Border: {
     borderWidth: 5,
     borderColor: theme.base1,
     borderRadius: 10
+  },
+
+  slightlyCurvedBase1Border: {
+    borderWidth: 5,
+    borderColor: theme.base1,
+    borderRadius: 5
   },
 
   curvedBase2Border: {
@@ -291,6 +345,12 @@ const styles = StyleSheet.create({
   curvedBase5Border: {
     borderWidth: 5,
     borderColor: theme.base5,
+    borderRadius: 10
+  },
+
+  curvedWhiteBorder: {
+    borderWidth: 5,
+    borderColor: theme.white,
     borderRadius: 10
   },
 
@@ -341,6 +401,10 @@ const styles = StyleSheet.create({
     marginRight: standardMargin,
     marginLeft: standardMargin
   },
+  bottomBorder: {
+        borderBottomColor: 'black',
+        borderBottomWidth: 5
+  },
 
   bottomMargin: {
     marginBottom: standardMargin,
@@ -349,6 +413,10 @@ const styles = StyleSheet.create({
 
   centerText: {
     textAlign: 'center'
+  },
+  full: {
+    width: '100%',
+    height: '100%'
   },
   fullWidth: {
     width: '100%'
@@ -384,6 +452,17 @@ const styles = StyleSheet.create({
     height: '25%'
   },
 
+  tenPercentHeight: {
+    height: '10%'
+  },
+
+  fifteenPercentHeight: {
+    height: '12%'
+  },
+
+  eightyFivePercentHeight: {
+    height: '88%'
+  },
   redBorder: {
     borderColor: 'red', 
     borderWidth: 5

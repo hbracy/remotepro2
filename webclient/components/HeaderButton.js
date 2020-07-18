@@ -9,7 +9,7 @@ import { CommonActions, DrawerActions } from '@react-navigation/native';
 
 import { TrademarkText } from '../components/StyledText';
 
-export default function HeaderButton({style, onPress, title }) {
+export default function HeaderButton({style, onPress, title, textColor }) {
 
   return(
       <TouchableOpacity style={[styles.container1, 
@@ -19,7 +19,7 @@ export default function HeaderButton({style, onPress, title }) {
                                 styles.centerCenter,
                                 style,]}
         onPress={onPress}>
-        <TrademarkText>{title}</TrademarkText>
+        <TrademarkText style={[textColor]}>{title}</TrademarkText>
       </TouchableOpacity>
 
   );

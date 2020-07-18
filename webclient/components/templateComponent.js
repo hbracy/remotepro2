@@ -9,7 +9,7 @@ import { styles } from '../styles/style.js'
 import Container from './Container.js';
 
 
-function Example() {
+function Example(props) {
 
   return (
     <View style={[styles.container1]}>

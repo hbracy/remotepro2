@@ -7,7 +7,7 @@ import { Entypo } from '@expo/vector-icons';
 import { styles } from '../styles/style.js';
 
 // My actions
-import { toggleLoginSignup, toggleLogin, getFiles } from '../constants/actions.js';
+import { toggleLoginSignup, toggleLogin, getFiles, getGoogleDriveFiles, authorizeGoogleDrive } from '../constants/actions.js';
 
 // My Components
 import Container from './Container.js';
@@ -20,6 +20,8 @@ import MessageModal from './MessageModal.js';
 import AddContactModal from './AddContactModal.js';
 import MyTextInput from './MyTextInput.js';
 import FileViewer from './FileViewer.js';
+import WorkViewer from './WorkViewer.js';
+
 
 // My Constants
 import { fileInfo } from '../constants/test_constants/test-file-info.js'
@@ -47,24 +49,33 @@ function FullScreenView(props) {
     );
 
   }
-  
-// console.log(props.files);
-          console.log('YEp', props.fileDataToDisplay)
-                      // <SyntaxHighlighter 
 
-              // language='javascript' 
-              // style={docco}
-              // // highlighter={"prism" || "hljs"}
-              // // PreTag={TextInput}
-              // // CodeTag={TextInput}
-              // >
-            // </SyntaxHighlighter>
+  function renderGoogleDriveFolderItems({item}) {
+    console.log('CURRENT FILE PATH STATE', props.currentFilePath);
+    return (
+      <TouchableOpacity onPress={() => {
+        // setCurrentItemName(currentItemName + item);
+        // console.log('currentItemName', currentItemName);
+        // props.dispatch(getGoogleDriveFiles('http://localhost:3000/' + props.currentFilePath + '/' + item))
+
+        props.dispatch(authorizeGoogleDrive());
+      }} style={[styles.container1, styles.centerCenter]}>
+        <Text> <Entypo name="folder" size={40} color="#323232"/></Text>
+        <Text>{item}</Text>
+      </TouchableOpacity>
+    );
+
+
+
+
+  }
 
   return (
     <View style={[props.style]}>
       <View style={[styles.absolutePosition, styles.fullWidth, styles.fullHeight, styles.noColor]}>
         <View style={[styles.container1]}>
-        { !props.fileDataToDisplay &&
+        { props.goToWork && <WorkViewer style={[styles.flexRow]} /> }
+        { props.goToFiles && !props.fileDataToDisplay &&
           <FlatList
             data={props.files}
             keyExtractor={(item) => item.key}
@@ -73,10 +84,10 @@ function FullScreenView(props) {
             horizontal={false}
             // extraData={props}
             style={[styles.container1]} 
-
           />
         }
-        { props.fileDataToDisplay && <FileViewer initialText={props.fileDataToDisplay} /> }
+        { props.goToFiles && props.fileDataToDisplay && <FileViewer canEdit={false} initialText={props.fileDataToDisplay} /> }
+
         </View>
       </View>
       <Container pointerEvents="box-none"
@@ -113,6 +124,8 @@ function FullScreenView(props) {
 }
 
 
+
+
 // {props.fileToOpen && 
 //   <Container>
 //   <Image source={props.fileToOpen} style={{height: '100%', width: '100%'}}/>
@@ -143,6 +156,9 @@ function mapStateToProps(state) {
     files: state.socketReducer.files,
     currentFilePath: state.socketReducer.currentFilePath,
     fileDataToDisplay: state.socketReducer.fileDataToDisplay,
+    goToWork: state.modalReducer.goToWork,
+    goToFiles: state.modalReducer.goToFiles,
+
   };
 }
 

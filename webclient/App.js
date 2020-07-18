@@ -46,6 +46,9 @@ export default function App(props) {
         await Font.loadAsync({
           ...Ionicons.font,
           'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+          'montserrat': require('./assets/fonts/Montserrat-Black.ttf'),
+          'cooper-black': require('./assets/fonts/cooperBlack.ttf'),
+
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
@@ -66,12 +69,11 @@ export default function App(props) {
     // console.log('RENDERING');
 
     return (
-      <Provider store={store} >
+      <Provider store={store}>
         <View style={[styles.fullDeviceWidth, styles.fullDeviceHeight]}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <HeaderNavigator headerRoute={HEADER_ROUTE} 
+          <HeaderNavigator headerRoute={HEADER_ROUTE} isLoggedIn={true}
             style={[styles.container1]} />
-
         </View>
       </Provider>
     );

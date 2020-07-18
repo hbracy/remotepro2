@@ -6,7 +6,16 @@ const initialState = {
   messages: [],
   gettingFiles: false,
   files: [],
-  fileDataToDisplay: null
+  fileDataToDisplay: null,
+  gettingDriveFiles: false,
+  gettingWork: false,
+  currentWorkItem: null,
+  addingWorkLane: false,
+  addWorkLaneSuccess: false,
+  addingWorkItem: false,
+  addWorkItemSuccess: false,
+  changingStatus: false,
+  changedStatusSuccess: false,
 }
 
 // CHange name to networkdatareducer
@@ -98,6 +107,91 @@ export default function socketReducer(state = initialState, action) {
         fileDataToDisplay: action.fileDataToDisplay,
       }
 
+    case 'GET_GOOGLE_DRIVE_FILES':
+      console.log('DISPATCHING GET_GOOGLE_DRIVE_FILES');
+      return {
+        ...state,
+        gettingDriveFiles: true,
+
+      }
+
+    case 'RECIEVED_GOOGLE_DRIVE_FILES':
+      console.log('DISPATCHING RECIEVED_GOOGLE_DRIVE_FILES');
+      return {
+        ...state,
+        gettingDriveFiles: false,
+        files: action.files,
+        currentFilePath: action.currentFilePath
+      }
+
+    case 'RECIEVED_GOOGLE_FILE_TO_OPEN':
+      console.log('DISPATCHING RECIEVED_GOOGLE_FILE_TO_OPEN');
+      return {
+        ...state,
+        gettingDriveFiles: false,
+        currentFilePath: action.path,
+        fileDataToDisplay: action.fileDataToDisplay,
+      }
+
+    case 'GET_WORK_ITEM':
+      console.log('DISPATCHING GET_WORK');
+      return {
+        ...state,
+        gettingWork: true,
+      }
+      
+    case 'RECIEVED_WORK_ITEM':
+      console.log('DISPATCHING RECIEVED_WORK');
+      return {
+        ...state,
+        gettingWork: false,
+        currentWorkItem: action.workItem,
+      }
+
+    case 'ADD_WORK_LANE':
+      console.log('DISPATCHING ADD_WORK_LANE');
+      return {
+        ...state,
+        addingWorkLane: true,
+      }
+      
+    case 'RECIEVED_WORK_LANE':
+      console.log('DISPATCHING RECIEVED_WORK_LANE');
+      return {
+        ...state,
+        addingWorkLane: false,
+        addWorkLaneSuccess: action.success,
+      }
+
+    case 'ADD_WORK_ITEM':
+      console.log('DISPATCHING ADD_WORK_ITEM');
+      return {
+        ...state,
+        addingWorkItem: true,
+      }
+      
+    case 'ADDED_WORK_ITEM':
+      console.log('DISPATCHING ADDED_WORK_ITEM');
+      return {
+        ...state,
+        addingWorkItem: false,
+        currentWorkItem: action.updatedParent,
+      }
+
+    case 'CHANGE_STATUS':
+      console.log('DISPATCHING CHANGE_STATUS');
+      return {
+        ...state,
+        changingStatus: true,
+      }
+      
+    case 'CHANGED_WORK_STATUS':
+      console.log('DISPATCHING CHANGED_WORK_LANE');
+      return {
+        ...state,
+        changingStatus: false,
+        currentWorkItem: action.updatedParent,
+      }
 
     default:
       return state;
