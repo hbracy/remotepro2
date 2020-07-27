@@ -37,6 +37,16 @@ export const ADD_WORK_ITEM = 'ADD_WORK_ITEM';
 export const ADDED_WORK_ITEM = 'ADDED_WORK_ITEM';
 export const CHANGE_STATUS = 'CHANGE_STATUS';
 export const CHANGED_WORK_STATUS = 'CHANGED_WORK_STATUS';
+export const GO_TO_CALENDAR = 'GO_TO_CALENDAR';
+export const DELETE_WORK_ITEM = 'DELETE_WORK_ITEM';
+export const DELETED_WORK_ITEM = 'DELETED_WORK_ITEM';
+export const GO_TO_FILES = 'GO_TO_FILES';
+export const CREATE_EVENT = 'CREATE_EVENT';
+export const CREATED_EVENT = 'CREATED_EVENT';
+export const GET_EVENTS = 'GET_EVENTS';
+export const RETRIEVED_EVENTS = 'RETRIEVED_EVENTS';
+export const CHANGE_EVENT = 'CHANGE_EVENT';
+export const CHANGED_EVENT = 'CHANGED_EVENT';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
@@ -45,7 +55,7 @@ const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
 // time.
 const TOKEN_PATH = 'token.json';
 
-let historyStack = []
+// let historyStack = []
 
 
 const socket = socketIOClient('http://localhost:3000');
@@ -63,11 +73,11 @@ let requestOptions = {
   }
 }
 
-window.onpopstate = function(e){
-  historyStack.pop();
-  let url = location.href.replace('http://localhost:19006/', 'http://localhost:3000/');
-  store.dispatch(getFiles(url, true));
-};
+// window.onpopstate = function(e){
+//   historyStack.pop();
+//   let url = location.href.replace('http://localhost:19006/', 'http://localhost:3000/');
+//   store.dispatch(getFiles(url, true));
+// };
 
 
 export function toggleLoginSignup() {
@@ -110,6 +120,20 @@ export function goToWork() {
     type: GO_TO_WORK
   }
 }
+
+
+export function goToCalendar() {
+  return {
+    type: GO_TO_CALENDAR
+  }
+}
+
+export function goToFiles() {
+  return {
+    type: GO_TO_FILES
+  }
+}
+
 
 export function connectToSocket() {
   return {
@@ -250,6 +274,24 @@ export function changeStatus(parentItem, newLaneId, workItemId, order) {
   }
 }
 
+export function deleteWorkItem(workItemId) {
+  console.log('deleting work item', workItemId);
+  socket.emit('deleteWorkItem', workItemId);
+  return async (dispatch) => {
+    store.dispatch({
+      type: DELETE_WORK_ITEM
+    });
+
+    await socket.on('deleteWorkItem', updatedParent => {
+      console.log('YEAH DELETING WORK ITEM', updatedParent)
+      store.dispatch({
+        type: DELETED_WORK_ITEM,
+        updatedParent
+      });
+    });
+  }
+}
+
 export function addWorkItem(parentItem, card, laneId) {
   console.log('LOOK HERE', card, laneId);
   
@@ -281,6 +323,101 @@ export function addWorkItem(parentItem, card, laneId) {
   }
 }
 
+export function createEvent(newEvent) {
+  // console.log(newEvent);
+  let newEventDataToSend = {
+    start: newEvent.start,
+    end: newEvent.end,
+    title: newEvent.title,
+  }
+
+  socket.emit('createEvent', newEventDataToSend);
+  return (dispatch) => { 
+    store.dispatch({
+      type: CREATE_EVENT
+    });
+
+
+    socket.once('createEvent', createdEvent => {
+
+      console.log('YEAH CREATING EVENT', newEvent)
+      if (createdEvent){
+        createdEvent.start = new Date(createdEvent.start);
+        createdEvent.end = new Date(createdEvent.end);
+
+        store.dispatch({
+          type: CREATED_EVENT,
+          createdEvent
+        });
+      }
+    });
+  }
+
+}
+
+
+export function getEvents() {
+
+  socket.emit('getEvents');
+  return (dispatch) => { 
+    dispatch({
+      type: GET_EVENTS
+    });
+
+    socket.once('getEvents', returnedEvents => {
+      let events = []
+      returnedEvents.map(event => {
+        event.start = new Date(event.start);
+        event.end = new Date(event.end);
+        events.push(event);
+      });
+
+      console.log('YEAH GETTING EVENTS', events)
+      if (events){
+        dispatch({
+          type: RETRIEVED_EVENTS,
+          events
+        });
+      }
+    });
+  }
+
+}
+
+export function changeEventDetails(changedEventDetails) {
+  let newStart = changedEventDetails.start;
+  let newEnd = changedEventDetails.end;
+  let event = changedEventDetails.event;
+  event.start = newStart;
+  event.end = newEnd;
+
+  socket.emit('changeEventDetails', event);
+
+  return (dispatch) => {
+    dispatch({
+      type: CHANGE_EVENT
+    });
+
+    socket.once('changeEventDetails', updatedEvents => {
+      console.log('RETURNED EVENTS', updatedEvents);
+      if (updatedEvents) {
+        let events = []
+        updatedEvents.map(event => {
+          event.start = new Date(event.start);
+          event.end = new Date(event.end);
+          events.push(event);
+        });
+
+        dispatch({
+          type: CHANGED_EVENT,
+          events
+        });
+      }
+    });
+  }
+
+
+}
 
 
 export function sendMessage(contactEmail, conversationId, text) {
@@ -310,13 +447,13 @@ export function sendMessage(contactEmail, conversationId, text) {
 
 export function getFiles(url, fromBack = false) {
 
-  let path = url.replace('http://localhost:3000/', '');
-  let displayUrl = url.replace('http://localhost:3000/', 'http://localhost:19006/');
+  // let path = url.replace('http://localhost:3000/', '');
+  // let displayUrl = url.replace('http://localhost:3000/', 'http://localhost:19006/');
 
-  if (!fromBack) {
-    window.history.pushState({},'', displayUrl);
-    historyStack.push(displayUrl);
-  }
+  // if (!fromBack) {
+  //   window.history.pushState({},'', displayUrl);
+  //   historyStack.push(displayUrl);
+  // }
   // console.log(historyStack);
 
   let files = null;
@@ -352,7 +489,7 @@ export function getFiles(url, fromBack = false) {
           // console.log('BLOBTYPE', fileUrl.type);
           store.dispatch({
             type: RECIEVED_FILE_TO_OPEN,
-            currentFilePath: path,
+            // currentFilePath: path,
             fileDataToDisplay: fileToOpen.data,
           });
         } else {
@@ -360,7 +497,7 @@ export function getFiles(url, fromBack = false) {
           store.dispatch({
             type: RECIEVED_ORG_FILES,
             files: files,
-            currentFilePath: path
+            // currentFilePath: path
           });
         }
        } else {

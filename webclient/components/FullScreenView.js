@@ -21,6 +21,7 @@ import AddContactModal from './AddContactModal.js';
 import MyTextInput from './MyTextInput.js';
 import FileViewer from './FileViewer.js';
 import WorkViewer from './WorkViewer.js';
+import CalendarViewer from './CalendarViewer.js';
 
 
 // My Constants
@@ -74,6 +75,7 @@ function FullScreenView(props) {
     <View style={[props.style]}>
       <View style={[styles.absolutePosition, styles.fullWidth, styles.fullHeight, styles.noColor]}>
         <View style={[styles.container1]}>
+        { props.goToCalendar && <CalendarViewer style={[styles.flexRow]} /> }
         { props.goToWork && <WorkViewer style={[styles.flexRow]} /> }
         { props.goToFiles && !props.fileDataToDisplay &&
           <FlatList
@@ -158,7 +160,7 @@ function mapStateToProps(state) {
     fileDataToDisplay: state.socketReducer.fileDataToDisplay,
     goToWork: state.modalReducer.goToWork,
     goToFiles: state.modalReducer.goToFiles,
-
+    goToCalendar: state.modalReducer.goToCalendar
   };
 }
 

@@ -1,21 +1,28 @@
 import * as React from 'react';
 import { View, FlatList, TouchableOpacity, Text, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+import Board from 'react-trello';
+import ReactMarkdown from 'react-markdown';
 
-import Board from 'react-trello'
-
-import { getWorkItem, addWorkLane, addWorkItem, changeStatus, goToItem } from '../constants/actions.js';
+import { getWorkItem, addWorkLane, addWorkItem, changeStatus, goToItem, deleteWorkItem } from '../constants/actions.js';
 
 import { styles } from '../styles/style.js'
 
 import Container from './Container.js';
 import { TrademarkText, MonoText, TrademarkBigHeaderText } from '../components/StyledText';
+import HeaderButton from '../components/HeaderButton.js';
+
+
+const markdownText = '# Remote Pro\n\n## Executive Summary\n\n**There exists no full work from home suite.** Instead, businesses typically combine a patchwork of software (Slack, Jira, Google Drive, Zoom) to run their now remote business. The cost of such a suite for a small business is a prohibitive $7500 a month. Businesses that are new to work from home are looking for a better way to run.\n\n**Remote Pro is the first full work from home suite.** We include messaging, calling, ticketing, calendar, emails, and file storage and editing, all from the browser. While competitors have focused on specific niches, it is too confusing and expensive to run a distributed team with distributed tools.\n\n**Remote Pro is be the best place to work from home.** While we are first targeting businesses that are new to remote work, we will expand our market to be the most convenient, inexpensive, and healthy way to work from home. Excellent customer service when there is frustration, and world class engineering to make sure it doesn\'t happen again. It is from this position that we will expand our market to the high rolling software industry.\n\n**Remote Pro is not for businesses that were mostly remote before the pandemic.** We are looking to become the best in the industry, not the most popular. The best way for us to understand the needs of the now remote economy is to address the needs of businesses with 3 - 20 employees that had never before been remote. After we address this market, our position will be strong enough to dominant the larger work from home market.\n\nIn 2020, [42%](https://www.cnbc.com/2020/04/09/heres-what-we-know-about-how-remote-work-changes-us.html) of workers who were not working from home, began to work from home, with [90%](https://buffer.com/state-of-remote-work-2019) saying that they hoped to work from home for the rest of their lives.'
+
 
 
 function WorkViewer(props) {
   let defaultWorkItemId = '5f1099f89c35da7fb0f59ebb';
   React.useEffect(() => {
-    props.dispatch(getWorkItem(defaultWorkItemId));
+    if (!props.currentWorkItem) {
+      props.dispatch(getWorkItem(defaultWorkItemId));
+    }
   }, []);
 
   function transformWorkItemDataToFrontEnd(backendWorkItem) {
@@ -61,7 +68,15 @@ function WorkViewer(props) {
     {props.currentWorkItem ?
       <div style={{overflowY: 'scroll'}}>
         <View style={[styles.base1, styles.tenPercentHeight, styles.allAroundMargin, styles.slightlyCurvedBase1Border]}>
-          <TrademarkBigHeaderText>{props.currentWorkItem.title}</TrademarkBigHeaderText>
+          <Container style={[styles.flexRow]}>
+            <TrademarkBigHeaderText>{props.currentWorkItem.title}</TrademarkBigHeaderText>
+            <HeaderButton title="Go Back"
+              //Turn off everything if isSmallWindow
+              onPress={() => console.log('goback')}
+              style={[styles.container1, styles.curvedBase1Border, styles.base1]}
+              textColor={styles.base2Text}
+            />
+          </Container>
         </View>
         <Board style={{backgroundColor: 'transparent', overflowY: 'scroll', maxHeight: '70%'}} 
               laneStyle={{backgroundColor: '#d1ccc7', maxHeight: '70%'}}
@@ -69,6 +84,7 @@ function WorkViewer(props) {
               onLaneAdd={params => {addWorkLane(defaultWorkItemId, params.title)}}
               onCardAdd={(card, laneId) => {props.dispatch(addWorkItem(props.currentWorkItem, card, laneId))}}
               onCardClick={(cardId, metadata, laneId) => {props.dispatch(getWorkItem(cardId))}}
+              onCardDelete={(cardId, laneId) => {props.dispatch(deleteWorkItem(cardId))}}
               canAddLanes={true} 
               editLaneTitle={true}
               // onDataChange={onDataChange}
@@ -76,27 +92,10 @@ function WorkViewer(props) {
               data={transformWorkItemDataToFrontEnd(props.currentWorkItem)} />
         <View style={[styles.base1, styles.allAroundMargin, styles.slightlyCurvedBase1Border]}>
           <TrademarkBigHeaderText style={[styles.mediumFont]}>Description</TrademarkBigHeaderText>
+          <ReactMarkdown source={markdownText} />
 
-          <TrademarkText style={[styles.base2Text]}>
-            HEY HERE WE AREcxtufygivuhbjn;kbihouvigycuftxydrztfucygvuhbijnkojbiohvugicyfxtdrztxytfcuygivuhobipnobiovuicyfxtydzrxtfucygivuobinbiovu
-            dxfcgivuohgipho[pgiuoyftdifuogiphoi[jpoh[iopguiofyitdyfuogipuhoi[jpo[hopguiofy
-            igcvuoibohnj'obpivoucygpuhoi[jpo][hiopovuciyuxtrcyiuvhbxtufcyigvuhbihovugicyfutxdyrzdxtfucygivuhobijnhouvgiycfutxyrzetyxtucyivuobijhovuicyutxyrcuyivuyobiupnojbiouviycutxcygivuhobj
-            uxtcyiuvogibvuicytxivbvouicyvuobpiovhuciyvuohbiciytvuoibhpjhvouicyturxcyivuohibjhvouigcyfutxcyigvuhobijphovugicyufxigvuhbjhvljkgcfuxtcgivuhbijhvouicytufuogiuhbgovyuictuvfogiubvhougciyuvgibjvhuicgyv
-            ivguhbijphovigcvuohbijphovugioibjpovhoiugohbipjoovhuygiphoibjiovhuiyfogiph
-            ivoihugicufygoiuvhugiyogiubhvgiuygoibvouiygiubjhvoguhbovygiuphbjlhvkgiuurtxcyiguvhgcyifuxtcyiuvohgcyuf
-            ufxtcyguvohiugicyfuxtydcifugivhljkcgiytfuogiujbklvhkgciyfoygiuph;bjklvj k
-            icvuyoibgujhvougicytuvgiubjvhjgciyuovhilkljcguioyvguho;bjkvlhjouguphoibj;lvhouicoyfguhobjvhoufyguphobjklvhjkog
-            spbdfinokabjpifuhojadgipuhosbipdgsaubufdbsnjobihvuifygoiuhbijhvjkghcyiuvyolhbjkgcjyiufyvogihkjgciytdfuygilvhjckgidtfuoyiguhv
-            cgivugihbjgicytuvhjicgyutdfuyvhgicyuxitfuogvhjkchgiuovhjcgiyfuygihvkb kcgifuoghvkjgcifyghvb kcgifuoghvkjgcifyghvb
-            gvogbvhouigcfyogiuvbhgicfuoygibjvhoufgtpyhiogivofygtpyhiobvlhough
-            vuoyibonkjbihvuoiyogihoikbj;lvihouyfgiuhobnljklvhougiupho;kbnllvigpuhoiklbj;
-            asdfvyt8giuhobohvuigcytfgoiubjhvuioygihjbklhvouygiphbjlvhogpho;p[ioj;bjkvlhjouguphoibj
-            uvobgivouhgygibouygiupobjohp
-            voubiuphoihovuyguhobjivlhobj;ivoguphio;gupihoi[po;gpuiyh[ihpogpiuhi[p;gphilgjkihio;gilu
-            ogiphuoibivhogpuhogiuophoigiuophoigiovphoi[gpui]]]]]
-            oygipblvhuogiubjhj
-            ittvuoyibouciytufoygivucitfygubvoyft978guipbvhgiuoyfgihbjv]]]]]] YA
-          </TrademarkText>
+
+
         </View>
       </div>
 

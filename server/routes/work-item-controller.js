@@ -10,9 +10,17 @@ function getWorkItem(socket, user) {
   });
 }
 
+function getInitialWorkItem(socket, user) {
+  socket.on('getInitialWorkItem', async data => {
+    // console.log('HERE', data);
+    let workItem = await workItemsAPI.getWorkItem(user, null);
+    socket.emit('getWorkItem', workItem);
+  });
+}
+
 function addWorkLane(socket, user) {
   socket.on('addWorkLane', async data => {
-    console.log('HERE', data);
+    // console.log('HERE', data);
     let success = await workItemsAPI.addWorkLane(user, data.workItemId, data.laneId);
     socket.emit('addWorkLane', success);
   });
@@ -20,7 +28,7 @@ function addWorkLane(socket, user) {
 
 function addWorkItem(socket, user) {
   socket.on('addWorkItem', async workItem => {
-    console.log('WORK ITEM', workItem);
+    console.log('ADDING WORK ITEM:', workItem);
     let updated = await workItemsAPI.addWorkItem(user, workItem);
     socket.emit('addWorkItem', updated.value);
   });
@@ -28,9 +36,17 @@ function addWorkItem(socket, user) {
 
 function changeWorkItemStatus(socket, user) {
   socket.on('changeStatus', async changeStatusData => {
-    console.log('changeStatusData', changeStatusData;
+    // console.log('changeStatusData', changeStatusData);
     let updatedParent = await workItemsAPI.changeWorkItemStatus(user, changeStatusData);
     socket.emit('changeStatus', updatedParent.value);
+  });
+}
+
+function deleteWorkItem(socket, user) {
+  socket.on('deleteWorkItem', async workItemId => {
+    // console.log('deleteWorkItem', workItemId);
+    let updatedParent = await workItemsAPI.deleteWorkItem(user, workItemId);
+    socket.emit('deleteWorkItem', updatedParent.value);
   });
 }
 
@@ -58,5 +74,7 @@ module.exports = {
   addWorkLane: addWorkLane,
   addWorkItem: addWorkItem,
   changeWorkItemStatus: changeWorkItemStatus,
+  deleteWorkItem: deleteWorkItem,
+  getInitialWorkItem: getInitialWorkItem,
 }
 

@@ -6,6 +6,10 @@
   height: 40vmin;
   pointer-events: none;
 }
+.test {
+  height: 10vmin;
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

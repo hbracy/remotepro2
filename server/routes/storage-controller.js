@@ -13,14 +13,14 @@ function storageController(router, storage) {
 
   // respond with "hello world" when a GET request is made to the homepage
   router.get('/:bucket/:pathname*', async (req, res) => {
-    console.log(req.params)
+    // console.log(req.params)
     let pathname
     if (req.params['0']) {
       pathname = req.params.pathname + req.params['0'];
     } else {
       pathname = req.params.pathname;
     }
-    console.log('Bucket:', req.params.bucket, 'Params:', pathname);
+    // console.log('Bucket:', req.params.bucket, 'Params:', pathname);
 
     let result;
     if (pathname.includes('.')) {
@@ -32,7 +32,7 @@ function storageController(router, storage) {
 
       result = await storageTracker.getFileList(req.params.bucket, pathname);
     }
-    console.log('RESPONSE FROM /files/' + req.params.bucket + '/' + pathname, result);
+    // console.log('RESPONSE FROM /files/' + req.params.bucket + '/' + pathname, result);
     res.send(result);
   });
 

@@ -1,3 +1,20 @@
+
+// const initialTime = new Date();
+// initialTime.setHours(15);
+// initialTime.setMinutes(0);
+// initialTime.setMilliseconds(0);
+
+// // myEventsList
+// const myEventsList = [
+// {
+//   title: 'My first event',
+//   start: initialTime,
+//   end: new Date(),
+//   'allDay': false,
+//   'resource': null,
+// }]
+// let called = 0;
+
 const initialState = {
   socketConnection: '',
   gettingContacts: false,
@@ -16,8 +33,11 @@ const initialState = {
   addWorkItemSuccess: false,
   changingStatus: false,
   changedStatusSuccess: false,
+  deletingWorkItem: false,
+  creatingEvent: false,
+  currentEventList: null,
+  changingEvent: false,
 }
-
 // CHange name to networkdatareducer
 
 export default function socketReducer(state = initialState, action) {
@@ -191,6 +211,72 @@ export default function socketReducer(state = initialState, action) {
         ...state,
         changingStatus: false,
         currentWorkItem: action.updatedParent,
+      }
+
+    case 'DELETE_WORK_ITEM':
+      console.log('DISPATCHING DELETE_WORK_ITEM');
+      return {
+        ...state,
+        deletingWorkItem: true,
+      }
+      
+    case 'DELETED_WORK_ITEM':
+      console.log('DISPATCHING DELETED_WORK_ITEM');
+      return {
+        ...state,
+        deletingWorkItem: false,
+        currentWorkItem: action.updatedParent,
+      }
+    case 'CREATE_EVENT':
+      console.log('DISPATCHING CREATE_EVENT');
+      return {
+        ...state,
+        creatingEvent: true,
+      }
+      
+    case 'CREATED_EVENT':
+      console.log('DISPATCHING CREATED_EVENT');
+      return {
+        ...state,
+        creatingEvent: false,
+        currentEventList: state.currentEventList.concat(action.createdEvent),
+      }
+    case 'GET_EVENTS':
+      console.log('DISPATCHING GET_EVENTS');
+      return {
+        ...state,
+        gettingEvents: true,
+      }
+      
+    case 'RETRIEVED_EVENTS':
+      console.log('DISPATCHING RETRIEVED_EVENTS');
+      return {
+        ...state,
+        gettingEvents: false,
+        currentEventList: action.events,
+      }
+    case 'CHANGE_EVENT':
+      console.log('DISPATCHING CHANGE_EVENT');
+      return {
+        ...state,
+        changingEvent: true,
+      }
+      
+    case 'CHANGED_EVENT':
+      console.log('DISPATCHING CHANGED_EVENT');
+      console.log(action.events);
+
+      // let updatedList = []
+      // currentEventList.forEach((event, i) => { 
+      //   if (event._id == action.returnedEvent._id) {
+      //     state.currentEventList[i] = action.returnedEvent; 
+      //   }
+      // });
+
+      return {
+        ...state,
+        changingEvent: false,
+        currentEventList: action.events,
       }
 
     default:

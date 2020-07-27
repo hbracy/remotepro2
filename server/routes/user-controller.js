@@ -58,7 +58,7 @@ function userController(router) {
     console.log('GETTING REQUEST FOR /reserved/getContacts');
 
     let toSend = await userTracker.getContacts(req.user.email);
-    console.log('RESPONSE FROM /reserved/getContacts:', toSend);
+    // console.log('RESPONSE FROM /reserved/getContacts:', toSend);
     res.send(toSend)
   });
 

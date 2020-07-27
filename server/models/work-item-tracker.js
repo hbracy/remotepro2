@@ -5,7 +5,7 @@ function WorkItemTracker() {
   this.getWorkItem = async function getWorkItem(user, workItemId) {
     console.log('workItemId', workItemId);
     let workItem = await workItemsAPI.getWorkItem(user, workItemId);
-    console.log('returned', workItem);
+    // console.log('returned', workItem);
     return workItem;
   }
 

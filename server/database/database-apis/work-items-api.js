@@ -5,7 +5,13 @@ async function getWorkItem(user, workItemId) {
   const db = await coreDb.getOrConnect();
   let workItem = {};
   try {
-    workItem = await db.collection('workItems').findOne({'_id': new ObjectId(workItemId)});
+    if (workItemId) {
+      workItem = await db.collection('workItems').findOne({'_id': new ObjectId(workItemId)});
+
+    } else {
+      workItem = await db.collection('workItems').findOne({'creator': user.email, 'parent': null});
+      console.log('INITIAL WORK ITEM:', workItem);
+    }
   } catch (err) {
     console.log(err);
     workItem = false;
@@ -127,12 +133,50 @@ async function changeWorkItemStatus(user, changeWorkItemStatusData) {
   return updatedParent;
 }
 
+
+async function deleteWorkItem(user, workItemId) {
+  const db = await coreDb.getOrConnect();
+  let updatedParent = null;
+  const childQuery = {'_id': new ObjectId(workItemId)};
+
+  try {
+
+    // To delete and return the deleted
+    let deleted = await db.collection('workItems').findOneAndDelete(childQuery);
+    console.log('DELETED CHILD', deleted);
+// 5f109a587b5b7f7fc7e25ae0
+
+// 5f1099f89c35da7fb0f59ebb
+// deleted.value.parent
+    const parentQuery = {'_id': new ObjectId(deleted.value.parent)};
+    // // See https://docs.mongodb.com/manual/reference/operator/update/pull/ for more info
+    const operationOnParent = {
+      $pull: {
+        'subItems': { 'id': new ObjectId(deleted.value._id) },
+      }
+    };
+    const options = {
+      returnOriginal: false,
+    };
+
+    updatedParent = await db.collection('workItems').findOneAndUpdate(parentQuery, operationOnParent, options);
+    console.log('OP ON PARENT:', updatedParent);
+
+  } catch (err) {
+    console.log(err);
+    updatedParent = null;
+  }
+  return updatedParent;
+}
+
 module.exports = {
   // sendMessage: sendMessage,
   getWorkItem: getWorkItem,
   addWorkLane: addWorkLane,
   addWorkItem: addWorkItem,
   changeWorkItemStatus: changeWorkItemStatus,
+  deleteWorkItem: deleteWorkItem,
+  
 }
 
 

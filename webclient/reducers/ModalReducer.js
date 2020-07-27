@@ -13,7 +13,8 @@ const initialState = {
   addContactModalIsActive: false,
   isSmallWindow: win.width < 800,
   goToWork: false,
-  goToFiles: true
+  goToFiles: true,
+  goToCalendar: false,
 }
 
 
@@ -76,12 +77,32 @@ export default function modalReducer(state = initialState, action) {
           ...state,
           addContactModalIsActive: !state.addContactModalIsActive
         }
+
+      case 'GO_TO_FILES':
+        console.log("DISPATCHING GO_TO_FILES TO", true);
+        return {
+          ...state,
+          goToFiles: true,
+          goToWork: false,
+          goToCalendar: false
+        }
+
       case 'GO_TO_WORK':
         console.log("DISPATCHING GO_TO_WORK TO", true);
         return {
           ...state,
           goToWork: true,
           goToFiles: false,
+          goToCalendar: false
+        }
+      case 'GO_TO_CALENDAR':
+        console.log("DISPATCHING GO_TO_CALENDAR TO", true);
+        return {
+          ...state,
+          goToCalendar: true,
+          goToFiles: false,
+          goToWork: false,
+
         }
       default:
         return state;

@@ -10,7 +10,7 @@ import { styles } from '../styles/style.js'
 
 import { TrademarkText } from '../components/StyledText';
 
-import { connectToSocket, goToWork } from '../constants/actions.js';
+import { connectToSocket, goToWork, goToCalendar, goToFiles } from '../constants/actions.js';
 
 
 import Modal from '../modals/Modal.js';
@@ -81,8 +81,19 @@ function HomeScreen(props) {
           style={[styles.container1, styles.curvedBase1Border, styles.base1]}
           textColor={styles.base2Text}
         />
-        <Container style={[styles.container1, styles.allAroundMargin, styles.curvedBase1Border, styles.base1, styles.flexRow]} />
-        <Container style={[styles.container1, styles.allAroundMargin, styles.curvedBase1Border, styles.base1, styles.flexRow]} />
+        <HeaderButton title="Calendar"
+          //Turn off everything if isSmallWindow
+          onPress={() => props.dispatch(goToCalendar())}
+          style={[styles.container1, styles.curvedBase1Border, styles.base1]}
+          textColor={styles.base2Text}
+        />
+        <HeaderButton title="Files"
+          //Turn off everything if isSmallWindow
+          onPress={() => props.dispatch(goToFiles())}
+          style={[styles.container1, styles.curvedBase1Border, styles.base1]}
+          textColor={styles.base2Text}
+        />
+
       </Container>
     </View>
   );

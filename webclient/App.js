@@ -10,6 +10,8 @@ import useLinking from './navigation/useLinking';
 import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+// import { NativeRouter, Route, Link } from "react-router-native";
 
 import Constants from './tools/Constants';
 import rootReducer from './reducers/RootReducer.js'
@@ -67,16 +69,30 @@ export default function App(props) {
     return null;
   } else {
     // console.log('RENDERING');
+          // {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+
 
     return (
       <Provider store={store}>
         <View style={[styles.fullDeviceWidth, styles.fullDeviceHeight]}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <HeaderNavigator headerRoute={HEADER_ROUTE} isLoggedIn={true}
-            style={[styles.container1]} />
+          <Router>
+            <Route path="/remotepro/remoteprohomepage" component={() => <HeaderNavigator headerRoute={HEADER_ROUTE} isLoggedIn={true}
+            style={[styles.container1]} />} />
+          </Router>
+
         </View>
       </Provider>
     );
+
+    // return (
+    //   <Provider store={store}>
+    //     <View style={[styles.fullDeviceWidth, styles.fullDeviceHeight]}>
+    //         <HeaderNavigator headerRoute={HEADER_ROUTE} isLoggedIn={true}
+    //         style={[styles.container1]} />
+    //     </View>
+    //   </Provider>
+    // );
+
   }
 } 
 

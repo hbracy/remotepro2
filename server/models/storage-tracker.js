@@ -45,15 +45,15 @@ function StorageTracker(storage) {
 
     try {
       const [files] = await storage.bucket(bucket).getFiles(options);
-      console.log('yuhoiobpvouhbijYUHOPIBHVBPJIVOUHBIPJU', files);
+      // console.log('yuhoiobpvouhbijYUHOPIBHVBPJIVOUHBIPJU', files);
       let fileNames = []
       files.forEach((files) => { 
         fileNames.push(files.name);
       });
-      console.log('YEAHBABY', fileNames);
-      console.log('PATHNAME', pathname);
+      // console.log('YEAHBABY', fileNames);
+      // console.log('PATHNAME', pathname);
       let toReturnFileNames = listSubdirectoriesOnly(pathname, fileNames);
-      console.log('YEAHBABY2 ', toReturnFileNames);
+      // console.log('YEAHBABY2 ', toReturnFileNames);
 
       return toReturnFileNames
     } catch (err) {
