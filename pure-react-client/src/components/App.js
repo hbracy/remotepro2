@@ -24,8 +24,7 @@ export const store = setup();
 
 
 export default function App(props) {
-
-
+  const notificationSystem = React.createRef();
 
   return (
     <Provider store={store}>
@@ -35,6 +34,7 @@ export default function App(props) {
     </Provider>
   );
 }
+        // <NotificationSystem ref={notificationSystem} />
 
       //   <div className={' container1 base3'}>
       //   </div>

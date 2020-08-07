@@ -1,6 +1,33 @@
 const coreDb = require('../core-db');
+const ObjectId = require('mongodb').ObjectID;
 
+async function getUsersInConversation(conversationId) {
+  const db = await coreDb.getOrConnect();
+  let users = null;
+  try {
+    let conversation = await db.collection('conversations').findOne({'_id': new ObjectId(conversationId)});
+    users = conversation.participants;
+  } catch (err) {
+    console.log(err);
+    users = false;
+  }
+  console.log(users);
+  return users;
+}
 
+async function getConversations(email) {
+  const db = await coreDb.getOrConnect();
+  let conversations = null;
+  try {
+    conversations = await db.collection('conversations').find({'participants': email}).toArray();
+  } catch (err) {
+    console.log(err);
+    conversations = false;
+  }
+  console.log(conversations);
+  return conversations;
+
+}
 
 
 async function addConversation(firstEmail, secondEmail) {
@@ -68,6 +95,8 @@ module.exports = {
   addConversation: addConversation,
   sendMessage: sendMessage,
   getMessages: getMessages,
+  getConversations: getConversations,
+  getUsersInConversation: getUsersInConversation
 }
 
 

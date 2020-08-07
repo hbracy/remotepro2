@@ -50,7 +50,6 @@ function WorkViewer(props) {
         title: laneType.id,
         order: laneType.order,
         cards: [],
-        // style: {height: '50%'}
       });
     })
 
@@ -83,16 +82,11 @@ function WorkViewer(props) {
         <div className={'base1 tenPercentHeight allAroundMargin slightlyCurvedBase1Border'}>
           <Container>
             <TrademarkBigHeaderText>{props.currentWorkItem.title}</TrademarkBigHeaderText>
-            <HeaderButton title="Go Back"
-              //Turn off everything if isSmallWindow
-              onPress={() => console.log('goback')}
-              className={'curvedBase1Border base1'}
-              textColor={'base2Text'}
-            />
           </Container>
         </div>
-        <Board style={{backgroundColor: 'transparent', overflowY: 'scroll', maxHeight: '70%'}} 
-              laneStyle={{backgroundColor: '#d1ccc7', maxHeight: '60%'}}
+        <Board style={{backgroundColor: 'transparent', fontFamily: 'Verdana', overflowY: 'scroll', maxHeight: '70%'}} 
+              laneStyle={{backgroundColor: '#d1ccc7',  maxHeight: '50vh' }}
+              // cardStyle={{}}
               editable={true} 
               onLaneAdd={params => {addWorkLane(defaultWorkItemId, params.title)}}
               onCardAdd={(card, laneId) => {props.dispatch(addWorkItem(props.currentWorkItem, card, laneId))}}

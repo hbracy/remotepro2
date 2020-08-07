@@ -18,9 +18,9 @@ import WorkViewer from './WorkViewer.js';
 import CalendarViewer from './CalendarViewer.js';
 import MessageModal from './MessageModal.js';
 import FileViewer from './FileViewer.js';
+import AddContactModal from './AddContactModal.js';
+import SettingSuggestionModal from './SettingSuggestionModal.js';
 
-
-// import AddContactModal from './AddContactModal.js';
 // import MyTextInput from './MyTextInput.js';
 
 // My Constants
@@ -83,10 +83,10 @@ function FullScreenView(props) {
           props.goToWork && <WorkViewer /> 
         }
         { 
-          props.goToFiles && !props.fileData && <FileDesktop />
+          props.goToFiles && <FileDesktop />
         }
         {
-          props.goToFiles && props.fileData && <FileViewer canEdit={false} fileData={props.fileData} /> 
+          props.goToFileViewer && <FileViewer canEdit={false} fileData={props.fileData} /> 
         }
 
         </Container>
@@ -94,12 +94,13 @@ function FullScreenView(props) {
       <Container className={''}>
         <Container>
           {
-            // props.addContactModalIsActive && <AddContactModal style={[styles.container1]} />
+            props.addContactModalIsActive && <AddContactModal className={'container1'} />
           }
         </Container>
         <Container>
         </Container>
         <Container>
+          { props.settingsSuggestionData && <SettingSuggestionModal listData={props.settingsSuggestionData} className={'relativePosition'} /> }
         </Container>
         <Container>
           {
@@ -164,13 +165,14 @@ function mapStateToProps(state) {
     loginToken: state.socketReducer.loginToken,
     settingModalIsActive: state.modalReducer.settingModalIsActive,
     addContactModalIsActive: state.modalReducer.addContactModalIsActive,
-    currentFilePath: state.socketReducer.currentFilePath,
-    fileData: state.socketReducer.fileData,
+    currentFilePath: state.modalReducer.currentFilePath,
+    fileData: state.modalReducer.fileData,
     goToWork: state.modalReducer.goToWork,
     goToFiles: state.modalReducer.goToFiles,
     goToCalendar: state.modalReducer.goToCalendar,
     username: state.socketReducer.username,
-
+    settingsSuggestionData: state.socketReducer.settingsSuggestionData,
+    goToFileViewer: state.modalReducer.goToFileViewer,
   };
 }
 

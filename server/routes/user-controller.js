@@ -1,5 +1,8 @@
 const UserTrackerModule = require('../models/user-tracker')
 let userTracker = new UserTrackerModule();
+let usersAPI = require('../database/database-apis/users-api');
+
+
 
 
 function userController(router) {

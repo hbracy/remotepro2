@@ -65,7 +65,8 @@ export default function modalReducer(state = initialModalState, action) {
           ...state,
           goToFiles: true,
           goToWork: false,
-          goToCalendar: false
+          goToCalendar: false,
+          goToFileViewer: false,
         }
 
       case 'GO_TO_WORK':
@@ -74,7 +75,8 @@ export default function modalReducer(state = initialModalState, action) {
           ...state,
           goToWork: true,
           goToFiles: false,
-          goToCalendar: false
+          goToCalendar: false,
+          goToFileViewer: false,
         }
       case 'GO_TO_CALENDAR':
         console.log("DISPATCHING GO_TO_CALENDAR TO", true);
@@ -83,8 +85,36 @@ export default function modalReducer(state = initialModalState, action) {
           goToCalendar: true,
           goToFiles: false,
           goToWork: false,
+          goToFileViewer: false,
+
 
         }
+    case 'GET_ORG_FILES':
+      console.log('DISPATCHING GET_ORG_FILES');
+      return {
+        ...state,
+        gettingOrgFiles: true,
+      }
+    case 'RECIEVED_ORG_FILES':
+      console.log('DISPATCHING RECIEVED_ORG_FILES');
+      return {
+        ...state,
+        gettingOrgFiles: false,
+        files: action.files,
+        currentFilePath: action.currentFilePath
+      }
+
+      case 'RECIEVED_FILE_TO_OPEN':
+        console.log('DISPATCHING RECIEVED_FILE_TO_OPEN');
+        return {
+          ...state,
+          gettingOrgFiles: false,
+          currentFilePath: action.currentFilePath,
+          fileData: action.fileData,
+          goToFileViewer: true,
+          goToFiles: false,
+        }
+
       default:
         return state;
     }

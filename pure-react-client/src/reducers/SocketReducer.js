@@ -71,7 +71,7 @@ export default function socketReducer(state = initialSocketState, action) {
       return {
         ...state,
         gettingContacts: false,
-        contacts: action.contacts
+        conversations: action.conversations
       };
 
     case 'GET_MESSAGES_START':
@@ -96,32 +96,6 @@ export default function socketReducer(state = initialSocketState, action) {
         gettingMessages: false,
         messages: action.messages
       };
-
-    case 'GET_ORG_FILES':
-      console.log('DISPATCHING GET_ORG_FILES');
-      return {
-        ...state,
-        gettingOrgFiles: true,
-
-      }
-
-    case 'RECIEVED_ORG_FILES':
-      console.log('DISPATCHING RECIEVED_ORG_FILES');
-      return {
-        ...state,
-        gettingOrgFiles: false,
-        files: action.files,
-        currentFilePath: action.currentFilePath
-      }
-
-    case 'RECIEVED_FILE_TO_OPEN':
-      console.log('DISPATCHING RECIEVED_FILE_TO_OPEN');
-      return {
-        ...state,
-        gettingOrgFiles: false,
-        currentFilePath: action.currentFilePath,
-        fileData: action.fileData,
-      }
 
     case 'GET_GOOGLE_DRIVE_FILES':
       console.log('DISPATCHING GET_GOOGLE_DRIVE_FILES');
@@ -278,6 +252,56 @@ export default function socketReducer(state = initialSocketState, action) {
         ...state,
         changingEvent: false,
         currentEventList: action.events,
+      }
+    case 'GETTING_USER_ORGS':
+      console.log('DISPATCHING GETTING_USER_ORGS');
+      return {
+        ...state,
+        gettingUserOrgs: true,
+      }
+    case 'RECIEVED_USER_ORGS':
+      console.log('DISPATCHING RECIEVED_USER_ORGS');
+      return {
+        ...state,
+        gettingUserOrgs: false,
+        userOrgs: action.userOrgs
+      }
+    case 'SEARCH_ADD_TO_GROUP':
+      console.log('DISPATCHING SEARCH_ADD_TO_GROUP');
+      return {
+        ...state,
+        gettingSearchAddToGroup: true,
+      }
+    case 'SEARCHED_ADD_TO_GROUP':
+      console.log('DISPATCHING SEARCHED_ADD_TO_GROUP');
+      return {
+        ...state,
+        gettingSearchAddToGroup: false,
+        settingsSuggestionData: action.results
+      }
+    case 'SAVING_FILE':
+      console.log('DISPATCHING SAVING_FILE');
+      return {
+        ...state,
+        savingFile: true,
+      }
+    case 'SAVED_FILE':
+      console.log('DISPATCHING SAVED_FILE');
+      return {
+        ...state,
+        savingFile: false
+      }
+    case 'SENDING_CALL_REQUEST':
+      console.log('DISPATCHING SENDING_CALL_REQUEST');
+      return {
+        ...state,
+        sendingCallRequest: true,
+      }
+    case 'CALL_REQUEST_FINISHED':
+      console.log('DISPATCHING SAVED_FILE');
+      return {
+        ...state,
+        sendingCallRequest: false
       }
 
     default:

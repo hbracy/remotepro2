@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import Notifications from 'react-notification-system-redux';
 
 import '../index.css';
 
@@ -18,6 +19,9 @@ function LandingPage(props) {
   //   console.log(props.currentWorkItem);
   // }, []);
 
+  React.useEffect(() => {
+    props.dispatch(connectToSocket());
+  }, []);
 
   React.useEffect(() => {
     console.log('LOGIN TOKEN', props.loginToken);
@@ -26,8 +30,15 @@ function LandingPage(props) {
 
   if (props.loginToken) {
     return (
-      <HomeScreen />
-    );
+      <Container>
+        <HomeScreen />
+        <Notifications
+          notifications={props.notifications}
+          // style={style}
+        />
+
+      </Container>
+    )
   } else {
     return (
       <NotLoggedInLandingPage />
@@ -40,6 +51,7 @@ function mapStateToProps(state) {
     loginToken: state.socketReducer.loginToken,
     currentWorkItem: state.socketReducer.currentWorkItem,
     loginModalIsActive: state.modalReducer.loginModalIsActive,
+    notifications: state.notifications,
 
   };
 }

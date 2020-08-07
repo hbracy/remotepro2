@@ -1,0 +1,5 @@
+{
+  "ice_servers": [
+    {"url":"stun:global.stun.twilio.com:3478?transport=udp","urls":"stun:global.stun.twilio.com:3478?transport=udp"},{"url":"turn:global.turn.twilio.com:3478?transport=tls","username":"2b2c09f73b691f7566d0e7fd30d00feaa8e2a820bf0a1a4b61b8af9c50408e76","urls":"turn:global.turn.twilio.com:3478?transport=tls","credential":"rIS/sHBCbMlA7s3Qmbov4AYEynk9CQ+Tf+axyoibVwM="},{"url":"turn:global.turn.twilio.com:3478?transport=tls","username":"2b2c09f73b691f7566d0e7fd30d00feaa8e2a820bf0a1a4b61b8af9c50408e76","urls":"turn:global.turn.twilio.com:3478?transport=tls","credential":"rIS/sHBCbMlA7s3Qmbov4AYEynk9CQ+Tf+axyoibVwM="},{"url":"turn:global.turn.twilio.com:443?transport=tcp","username":"2b2c09f73b691f7566d0e7fd30d00feaa8e2a820bf0a1a4b61b8af9c50408e76","urls":"turn:global.turn.twilio.com:443?transport=tcp","credential":"rIS/sHBCbMlA7s3Qmbov4AYEynk9CQ+Tf+axyoibVwM="}
+  ]
+}

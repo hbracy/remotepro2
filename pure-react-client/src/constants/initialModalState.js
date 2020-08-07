@@ -11,5 +11,12 @@ export const initialModalState = {
   goToWork: false,
   goToFiles: true,
   goToCalendar: false,
+  goToFileViewer: false,
+  fileData: null,
+  currentFilePath: '',
+  gettingFiles: false,
+  files: [],
 
 }
+
+

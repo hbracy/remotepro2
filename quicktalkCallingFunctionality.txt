@@ -1,0 +1,109 @@
+1. There is a match
+
+2. Register offer and answer listeners on back end:
+
+	// Handle the signaling logic
+	teacherSocket.on('offer', function (offerData) {
+	// myLog("RECIEVING OFFER:", offerData)
+		learnerSocket.emit('offer', offerData);
+	});
+	
+	learnerSocket.on('answer', function (answerData) {
+	// myLog("RECIEVING ANSWER:", answerData)
+		teacherSocket.emit('answer', answerData);
+	});
+
+3. Read iceServer.json and send data to client:
+
+	fs.readFile('ice_servers.json', 'utf8', function (err, data) {
+	  if (err) throw err;
+	  	socket.emit('iceServers', JSON.parse(data));
+	});
+
+4. Setup peers on clients:
+
+					socket.on('iceServers', res => {
+						console.log(res);
+						const peer = new SimplePeer({
+							initiator: window.location.href.endsWith("teach.html"),
+							config: { iceServers: res.ice_servers },
+						});
+
+					// console.log(peer);
+
+					peer.on('signal', data => {
+						let signal = JSON.stringify(data); // Send this data to other peer for peer.signal()
+					// console.log("SIGNAL:", signal);
+						if (peer.initiator) {
+							console.log("SENDING OFFER");
+							socket.emit('offer', signal);
+						} else {
+							console.log("SENDING ANSWER");
+							socket.emit('answer', signal);
+						}
+					});
+
+					socket.on('offer', function (offerData) {
+							console.log("RECIEVING OFFER:", offerData)
+						peer.signal(JSON.parse(offerData));
+					});
+
+					socket.on('answer', function (answerData) {
+							console.log("RECIEVING ANSWER:", answerData)
+						peer.signal(JSON.parse(answerData));
+					});
+
+					// Called upon successful connection- YAY!
+					peer.on('connect', () => {
+						console.log("CONNECTED TO PEER");
+						var mediaStream = navigator.mediaDevices.getUserMedia({audio: true, video: false}).timeout(100000);
+						mediaStream.then(function(stream) {
+							socket.emit('peerConnect');
+							peer.addStream(stream);
+							setTimeout(function(){
+								
+								setupCallCell();
+								
+							}, 2000);
+						}).catch(function(e) {
+							console.log(e);
+							notify("USER MUST ALLOW VOICE AND VIDEO");
+						});
+
+					});
+
+					peer.on('close', () => {
+						console.log("DISCONNECTED FROM PEER");
+
+					// socket.emit('peerDisconnect', msg);
+					});
+
+					peer.on('data', data => {
+						console.log('data: ' + data);
+					});
+
+					peer.on('stream', stream => {
+						// got remote video stream, now let's show it in a video tag
+						// var video = document.getElementById('incomingVideo');
+						// console.log(video);
+						// if ('srcObject' in video) {
+						//	 video.srcObject = stream;
+						//	 } else {
+						// video.src = window.URL.createObjectURL(stream); // for older browsers
+						// }
+						// 
+						// video.play();
+						let audio = document.getElementById('incomingAudio');
+						window.stream = stream;
+						audio.srcObject = stream;
+						audio.play();
+
+					});
+				//	}).catch(function(e) {
+				//		console.log(e);
+				//		alert("USER MUST ALLOW VOICE AND VIDEO");
+				//	});
+
+					});
+
+

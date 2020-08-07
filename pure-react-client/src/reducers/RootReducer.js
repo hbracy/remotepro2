@@ -1,8 +1,22 @@
 import { combineReducers } from 'redux'
 import socketReducer from './SocketReducer.js'
 import modalReducer from './ModalReducer.js'
+import {reducer as notifications} from 'react-notification-system-redux';
 
-export default combineReducers({
+
+
+
+const appReducer = combineReducers({
   socketReducer,
-  modalReducer
+  modalReducer,
+  notifications
 });
+
+
+export default function rootReducer(state, action) {
+  if (action.type === 'LOGOUT') {
+    state = undefined
+  }
+
+  return appReducer(state, action)
+}

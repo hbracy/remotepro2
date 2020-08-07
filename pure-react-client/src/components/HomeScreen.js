@@ -24,9 +24,6 @@ function HomeScreen(props) {
   const welcomeImageWidth = 2000
   const aspectRatio = 3 / 2;
 
-  React.useEffect(() => {
-    props.dispatch(connectToSocket());
-  }, []);
 
 
   return (

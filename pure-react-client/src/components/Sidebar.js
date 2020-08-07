@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { getContacts, toggleMessageModal, toggleAddContactModal } from '../actions/actions.js';
+import { getConversations, toggleMessageModal, toggleAddContactModal } from '../actions/actions.js';
 
 import Container from './Container.js';
 import SidebarListItem from './SidebarListItem.js';
@@ -34,8 +34,8 @@ function Sidebar(props) {
   // }
 
   React.useEffect(() => {
-    props.dispatch(getContacts());
-  }, []);
+    props.dispatch(getConversations());
+  }, [props.socketAuthorized]);
 
   return(
     <div className={props.className}>
@@ -49,18 +49,21 @@ function Sidebar(props) {
           </Container>
           <Container className={'container9  base2'}>
           {
-            props.contacts && 
+            props.conversations && 
             <div className={'full scroll'}> {
-              props.contacts.map((item) => 
-                <SidebarListItem
-                  onPress={() => {
-                    console.log('PRESS:', item.email);
-                    props.dispatch(toggleMessageModal(item.email))}
-                  }
-                  key={item.email}
-                  text={item.email} 
-                />
-              )
+              props.conversations.map((item) => {
+                const name = item.participants.find(participant => participant != props.username)
+                return (
+                  <SidebarListItem
+                    onPress={() => {
+                      console.log('PRESS:', item);
+                      props.dispatch(toggleMessageModal(name, item._id))
+                    }}
+                    key={item._id}
+                    text={name} 
+                  />
+                )
+              })
             }
             </div>
           }
@@ -74,7 +77,9 @@ function Sidebar(props) {
 function mapStateToProps(state) {
   return {
     sidebarIsActive: state.modalReducer.sidebarIsActive,
-    contacts: state.socketReducer.contacts
+    conversations: state.socketReducer.conversations,
+    socketAuthorized: state.socketReducer.socketAuthorized,
+    username: state.socketReducer.username,
 
   };
 }

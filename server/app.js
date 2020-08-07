@@ -19,6 +19,8 @@ const { Storage } = require('@google-cloud/storage');
 // Custom Imports
 const consoleDBLog = require('./tools').consoleDBLog;
 const coreDb = require('./database/core-db');
+const StorageTracker = require('./models/storage-tracker')
+
 // const SocketTracker = require('./models/SocketTracker.js')
 
 // Library Variables
@@ -31,6 +33,7 @@ const port = process.env.PORT || 3000;
 const projectId = 'remotepro'
 const keyFilename = os.homedir() + '/secrets/remotepro2.json'
 const storage = new Storage({projectId: projectId, keyFilename: keyFilename});
+let storageTracker = new StorageTracker(storage);
 
 
 //Pre DB Setup
@@ -44,7 +47,7 @@ coreDb.connect().then((db) => {
   // console.log(db);
 
   // Post DB setup
-  require('./startup/register-routes')(app, storage);
+  require('./startup/register-routes')(app, storageTracker);
 
   // One time functions. ALWAYS COMMENT OUT WHEN DONE
   // require('./database/call-once/session-store-setup.js').setupSessionStore();
@@ -68,11 +71,10 @@ coreDb.connect().then((db) => {
     // Make appropriate logs
     let ipAddress = socket.request.connection.remoteAddress;
     consoleDBLog('NEW CONNECTION FROM', ipAddress);
-
     socket.emit('serverConnection', "CONNECTED TO SERVER");
     // socketTracker.addSocket(socket);
     //Register socket listeners
-    require('./startup/register-socket-listeners')(socket);
+    require('./startup/register-socket-listeners')(socket, storageTracker);
 
   });
 }).catch((err) =>{

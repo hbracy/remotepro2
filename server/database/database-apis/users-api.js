@@ -3,6 +3,29 @@ const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 
+async function accountForWorkItemStatusChange(user, changeStatusData) {
+  const db = await coreDb.getOrConnect();
+  let result = true;
+  // if (changeStatusData.newStatus == 'Done') {
+    try {
+      // await db.collection('users').findOneAndUpdate({email: user.email}, { $inc: { 'workAnalysis.movedToDone': 1 }});
+
+      const operation = {
+        $addToSet: {
+          'workAnalysis.movedWorkItemEvents': { workItemId: changeStatusData._id, changeDate: new Date(), status: changeStatusData.newStatus}
+        }
+      };
+
+      await db.collection('users').findOneAndUpdate({email: user.email}, operation);
+      return result
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+    return result
+  // }
+}
+
 async function findUserFromEmail(email) {
   const db = await coreDb.getOrConnect();
   return db.collection('users').findOne({email: email});
@@ -65,7 +88,7 @@ async function updateUserWithOrg(org, user) {
   // console.log(org);
   const operation = {
     $addToSet: {
-      "orgs": org.org_name
+      "orgs": org._id
     }
   };
 
@@ -184,6 +207,7 @@ module.exports = {
   getTopFiveWithName: getTopFiveWithName,
   addContactToUser: addContactToUser,
   getContacts: getContacts,
+  accountForWorkItemStatusChange: accountForWorkItemStatusChange,
 }
 
 

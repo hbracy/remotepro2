@@ -11,7 +11,7 @@ let storageController = require("../routes/storage-controller.js").storageContro
 
 const tools = require('../tools');
 
-module.exports = function(app, storage) {
+module.exports = function(app, storageTracker) {
 
   app.use(express.json());
   app.use(router);
@@ -46,7 +46,7 @@ module.exports = function(app, storage) {
   userController(router);
 
   // give access to public files
-  storageController(router, storage);
+  storageController(router, storageTracker);
 
 
   orgAdminController(router);

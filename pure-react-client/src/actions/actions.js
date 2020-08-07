@@ -1,8 +1,16 @@
+import * as React from 'react';
 import { store } from '../components/App.js';
 import axios from 'axios';
 import socketIOClient from "socket.io-client";
 import fs from 'fs';
 import readline from 'readline';
+import Notifications from 'react-notification-system-redux';
+
+import setupCall from './CallingLogic.js'
+
+import Container from '../components/Container.js';
+import HeaderButton from '../components/HeaderButton.js';
+
 // import google from 'googleapis';
 
 // import fs = from'react-native-fs');
@@ -51,6 +59,18 @@ export const TEST = 'TEST';
 export const SET_LOGIN_STATE = 'SET_LOGIN_STATE';
 export const SESSION_EXPIRED = 'SESSION_EXPIRED';
 export const LOGOUT = 'LOGOUT';
+export const GETTING_USER_ORGS = 'GETTING_USER_ORGS';
+export const RECIEVED_USER_ORGS = 'RECIEVED_USER_ORGS';
+export const SEARCH_ADD_TO_GROUP = 'SEARCH_ADD_TO_GROUP';
+export const SEARCHED_ADD_TO_GROUP = 'SEARCHED_ADD_TO_GROUP';
+export const ADD_TO_GROUP = 'ADD_TO_GROUP';
+export const ADDED_TO_GROUP = 'ADDED_TO_GROUP';
+export const SAVING_FILE = 'SAVING_FILE';
+export const SAVED_FILE = 'SAVED_FILE';
+export const SENDING_CALL_REQUEST = 'SENDING_CALL_REQUEST';
+export const CALL_REQUEST_FINISHED = 'CALL_REQUEST_FINISHED';
+export const SETUP = 'SETUP';
+
 
 
 // If modifying these scopes, delete token.json.
@@ -159,6 +179,35 @@ export function connectToSocket() {
           token: loginData.token,
           username: loginData.username
         })
+
+        socket.on('callRequest', caller => {
+          const notificationOpts = {
+            title: 'CALL',
+            message: 'Call from ' + caller,
+            position: 'tc',
+            autoDismiss: 0,
+            children: (
+              <div className={'container1 flexRow'}>
+                <HeaderButton  
+                  onPress={() => {
+                    socket.emit('answeredCallRequest');
+                    setupCall(socket, caller, false);
+                  }}
+                  title={'ACCEPT'}
+                />
+                <HeaderButton  
+                  onPress={() => console.log('ignore')}         
+                  title={'IGNORE'}
+                />
+              </div>
+            )
+          };
+          store.dispatch(Notifications.success(notificationOpts));
+          // store.dispatch({
+          //   type: SAVED_FILE,
+          // });
+        });
+
       });
 
     });
@@ -206,31 +255,31 @@ export function setContacts(contacts) {
   }
 }
 
-export function getContacts() {
-  let contacts = null;
-  let requestOptions = {
-    headers: {
-      authorization: 'Bearer ' + localStorage.getItem('jwtToken')
-    }
-  }
+// export function getConversations() {
+//   let conversations = null;
+//   let requestOptions = {
+//     headers: {
+//       authorization: 'Bearer ' + localStorage.getItem('jwtToken')
+//     }
+//   }
 
-  return async (dispatch) => {
-    store.dispatch({
-      type: GET_CONTACTS_START
-    });
+//   return async (dispatch) => {
+//     store.dispatch({
+//       type: GET_CONTACTS_START
+//     });
 
-    let response = await axios.get('http://localhost:3000/reserved/getContacts', requestOptions);
+//     let response = await axios.get('http://localhost:3000/reserved/getContacts', requestOptions);
 
-    if (response.data) {
-      contacts = response.data.reverse();
-    }
+//     if (response.data) {
+//       conversations = response.data.reverse();
+//     }
 
-    store.dispatch({
-      type: RECIEVED_CONTACTS,
-      contacts
-    });
-  }
-}
+//     store.dispatch({
+//       type: RECIEVED_CONTACTS,
+//       conversations
+//     });
+//   }
+// }
 
 // export function getWorkItem(workItemId) {
 //   return async (dispatch) => {
@@ -251,6 +300,22 @@ export function getContacts() {
 //   }
 // }
 
+export function getUserOrgs() {
+  socket.emit('getUserOrgs');
+  return (dispatch) => { 
+    store.dispatch({
+      type: GETTING_USER_ORGS
+    });
+
+    socket.once('getUserOrgs', userOrgs => {
+      console.log('YEAH GETTING USER ORGS', userOrgs)
+      store.dispatch({
+        type: RECIEVED_USER_ORGS,
+        userOrgs
+      });
+    });
+  }
+}
 
 export function getMessages(email, messageModalConversationId) {
   socket.emit('getMessages', {email: email, conversationId: messageModalConversationId});
@@ -259,7 +324,7 @@ export function getMessages(email, messageModalConversationId) {
       type: GET_MESSAGES_START
     });
 
-    socket.once('getMessages', messages => {
+    socket.on('getMessages', messages => {
       console.log('YEAH GETTING MESSAGES', messages)
       store.dispatch({
         type: RECIEVED_MESSAGES,
@@ -551,7 +616,6 @@ export function getFiles(url, fromBack = false) {
       }
       // responseType: 'blob', // important
 
-
      }).then(async response => {
       if (response.data) {
         console.log(response.data.signedUrl)
@@ -561,7 +625,7 @@ export function getFiles(url, fromBack = false) {
           let fileToOpen = await axios.get(signedUrl);
           console.log('FILETODOWNLOAD', fileToOpen);
           console.log('ITS FILEPATH', path);
-
+          console.log(fileToOpen);
           // fileToDownload.download();
 
           // const fileUrl = window.URL.createObjectURL(new Blob([fileToOpen.data]));
@@ -736,7 +800,162 @@ export function getGoogleDriveFiles(url) {
 }
 
 
+export function searchMembersToAddToGroup(searchInput, orgId) {
+  console.log(searchInput);
+  socket.emit('searchMembersToAddToGroup', {searchInput: searchInput, orgId: orgId});
 
+  return (dispatch) => {
+    store.dispatch({
+      type: SEARCH_ADD_TO_GROUP
+    });
+
+    socket.once('searchMembersToAddToGroup', results => {
+      console.log('SEARCH RESULTS', results);
+      if (!results.some((sug) => sug.email == searchInput)) {
+        results.unshift({email: searchInput, _id: ''});
+      }
+      results.orgId = orgId;
+      store.dispatch({
+        type: SEARCHED_ADD_TO_GROUP,
+        results
+      });
+    });
+  }
+}
+
+
+
+export function toggleSettingSuggestion() {
+  return (dispatch) => {
+    store.dispatch({
+      type: SEARCHED_ADD_TO_GROUP,
+      results: null
+    });
+  }
+}
+
+export function addMemberToGroup(memberId, email, orgId) {
+  console.log(memberId, email, orgId);
+  socket.emit('addMemberToGroup', {memberId: memberId, email: email, orgId: orgId});
+
+  return (dispatch) => {
+    store.dispatch({
+      type: ADD_TO_GROUP
+    });
+
+    socket.once('addMemberToGroup', result => {
+      console.log('RESULT', result)
+      store.dispatch({
+        type: ADDED_TO_GROUP,
+        result
+      });
+    });
+  }
+
+}
+
+export function getConversations() {
+  console.log('getting conversations');
+  socket.emit('getConversations');
+  return (dispatch) => { 
+    store.dispatch({
+      type: GET_CONTACTS_START
+    });
+
+    socket.once('getConversations', conversations => {
+      console.log('YEAH GETTING conversations', conversations);
+      store.dispatch({
+        type: RECIEVED_CONTACTS,
+        conversations
+      });
+    });
+  }
+
+
+
+  //       type: GET_CONTACTS_START
+//     });
+
+//     let response = await axios.get('http://localhost:3000/reserved/getContacts', requestOptions);
+
+//     if (response.data) {
+//       conversations = response.data.reverse();
+//     }
+
+//     store.dispatch({
+//       type: RECIEVED_CONTACTS,
+//       conversations
+
+}
+
+export function sendCallRequest(conversationId, isVideo) {
+  socket.emit('sendCallRequest', {conversationId: conversationId});
+  return (dispatch) => { 
+    store.dispatch({
+      type: SENDING_CALL_REQUEST
+    });
+
+    socket.once('answeredCallRequest', (userWhoAnswered) => {
+      console.log('YEAH GOT CALL REQUEST', userWhoAnswered);
+      const notificationOpts = {
+        title: 'ANSWERED',
+        message: userWhoAnswered + ' ANSWERED YOUR CALL',
+        position: 'tc',
+        autoDismiss: 0,
+      };
+      store.dispatch(Notifications.success(notificationOpts));
+      store.dispatch({
+        type: CALL_REQUEST_FINISHED,
+      });
+      setupCall(socket, userWhoAnswered, true)
+
+    });
+  }
+
+}
+
+
+
+export function openNewFile(currentFilePath) {
+  return (dispatch) => {
+    store.dispatch({
+      type: RECIEVED_FILE_TO_OPEN,
+      currentFilePath: currentFilePath,
+      fileData: {title: 'Untitled', data: 'My new file'},
+    });
+  }
+
+}
+
+export function saveFile(fileText, fileTitle, fileDate) {
+  console.log('saving File');
+  // Emit save
+  // Set saving to true
+  // On successful result
+  // upon success, set saving to false and saved to true
+
+  // in backend:
+  // on save write the file to program memory and a temp doc in mongo
+  // when no one is editing the file save in google storage
+  // Make sure that getFile checks mongo first
+  // on success emit success
+
+
+  socket.emit('saveFile', {fileText: fileText, fileTitle: fileTitle, fileDate: fileDate});
+  return (dispatch) => { 
+    store.dispatch({
+      type: SAVING_FILE
+    });
+
+    socket.once('saveFile', success => {
+      console.log('YEAH GETTING SAVING FILE', success);
+      store.dispatch({
+        type: SAVED_FILE,
+      });
+    });
+  }
+
+}
 
 
 

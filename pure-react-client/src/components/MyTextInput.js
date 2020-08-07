@@ -16,7 +16,9 @@ function MyTextInput(props) {
   function onChangeText(event) {
     let value = event.target.value;
     if (toSubmit) {
-      setText('');
+      if (props.removeOnSubmit) {
+        setText('');
+      }
       setToSubmit(false);
       props.onSubmit(value);
     } else {
@@ -42,6 +44,7 @@ function MyTextInput(props) {
         value={text} 
         onKeyPress={onKeyPress}
         onChange={onChangeText}
+        placeholder={props.placeholder}
         className={'trademarkText container1 noColor noResize noShadow noBorder'}
       />
     </Container>
@@ -49,6 +52,9 @@ function MyTextInput(props) {
       );
 }
 
+MyTextInput.defaultProps = {
+  removeOnSubmit: false,
+};
 
 function mapStateToProps(state) {
   return {

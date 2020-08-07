@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import { toggleLoginSignup, logout, toggleSignup, toggleSettingsModal } from '../actions/actions.js';
+import { logout, toggleSettingsModal, getUserOrgs, searchMembersToAddToGroup } from '../actions/actions.js';
 
 import Container from './Container.js';
 import Modal from './Modal.js';
@@ -10,16 +10,29 @@ import HeaderButton from './HeaderButton.js';
 
 
 function SettingModal(props) {
-  const [orgOptionIsActivated, setOrgOptionIsActivated] = React.useState(false);
+  const [defaultIsActive, goToDefault] = React.useState(true);
+  const [orgOptionIsActive, goToOrgOption] = React.useState(false);
+  const [createNewOrgIsActive, goToCreateNewOrg] = React.useState(false);
+  const [currentOrgModal, setCurrentOrgModal] = React.useState(null);
+  const [addMemberInput, setAddMemberInput] = React.useState('');
+
+
+  React.useEffect(() => {
+    props.dispatch(getUserOrgs());
+  }, [])
 
   return (
     <Container className={props.className}>
-      <Modal onClickedOutside={() => props.dispatch(toggleSettingsModal())}
-            isModalityEnabled={true}
+      {console.log('DISABLE CLICK OUTSIDE: ', props.settingsSuggestionData)}
+      <Modal onClickedOutside={() => !props.settingsSuggestionData ? props.dispatch(toggleSettingsModal()) : console.log('NOT HERE')}
+            // disableOnClickOutside={props.settingsSuggestionData}
             default={props.settingModalIsActive}
             className={'container1 base3 flexColumn'}>
-        {!orgOptionIsActivated && <DefaultModal props={props} />}
-        {orgOptionIsActivated && <OrgModal /> }
+        {defaultIsActive && <DefaultModal />}
+        {orgOptionIsActive && <OrgModal /> }
+        {createNewOrgIsActive && <CreateOrgModal /> }
+        {currentOrgModal && <OrgSettingModal /> }
+
       </Modal>
     </Container>
   );
@@ -34,8 +47,11 @@ function SettingModal(props) {
         </HeaderButton>
       </Container>
       <Container>
-        <HeaderButton onPress={() => setOrgOptionIsActivated(true)}
-          title={"Create a new Org"} 
+        <HeaderButton onPress={() => {
+          goToOrgOption(true);
+          goToDefault(false);
+        }}
+          title={"Group Settings"} 
           >
         </HeaderButton>
       </Container>
@@ -50,7 +66,82 @@ function SettingModal(props) {
 
   }
 
-  function OrgModal(props) {
+
+
+  function OrgModal() {
+
+    return (
+      <Container className={'scroll flexColumn'}>
+        <HeaderButton onPress={() => {
+          goToCreateNewOrg(true);
+          goToOrgOption(false);
+
+        }}
+          title={"Create New Group"}
+          className={'base1 curvedBase1Border'}
+          textColor={'base2Text'}
+          >
+        </HeaderButton>
+        {
+          props.userOrgs.map((userOrg) => 
+            <HeaderButton onPress={() => {
+                setCurrentOrgModal(userOrg);
+                goToOrgOption(false);
+              }}
+              title={userOrg.org_name.toString()}
+              key={userOrg._id}
+              >
+            </HeaderButton>
+          )
+        }
+      </Container>
+    );
+
+  }
+
+  function OrgSettingModal() {
+
+    return (
+      <Container className={'scroll flexColumn'}>
+        <Container>
+          <Container className={''}>
+            <input 
+            onChange={event => {
+                    let value = event.target.value;
+                    if (value) props.dispatch(searchMembersToAddToGroup(value, currentOrgModal._id));
+                    setAddMemberInput(value);
+                  }}
+            placeholder={'Add member'} 
+            autoFocus
+            value={addMemberInput}
+            className={'container1'} />
+          </Container>
+          <HeaderButton onPress={() => {
+              goToCreateNewOrg(false);
+              goToOrgOption(false);
+            }}
+            title={"Add"}>
+          </HeaderButton>
+        </Container>
+        <HeaderButton onPress={() => {
+          goToCreateNewOrg(false);
+          goToOrgOption(false);
+        }}
+          title={"Other Option 1"}>
+        </HeaderButton>
+        <HeaderButton onPress={() => {
+          goToCreateNewOrg(false);
+          goToOrgOption(false);
+        }}
+          title={"Other Option 2"}>
+        </HeaderButton>
+      </Container>
+    );
+  }
+
+
+
+  function CreateOrgModal() {
 
     const [orgName, setOrgName] = React.useState('');
 
@@ -79,14 +170,14 @@ function SettingModal(props) {
     }
 
     return (
-      <Container className={'flexColumn ' + props.className}>
+      <Container className={'flexColumn'}>
         <Container className={'allAroundMargin'}>
           <input 
             onChange={event => {
               let value = event.target.value;
               setOrgName(value);
             }}
-            placeholder="Name your organization"
+            placeholder="Name your group"
             className={'fullHeight'}
           />
         </Container>
@@ -98,11 +189,15 @@ function SettingModal(props) {
       </Container>
     );
   }
+
 }
 
 function mapStateToProps(state) {
   return {
     settingModalIsActive: state.modalReducer.settingModalIsActive,
+    userOrgs: state.socketReducer.userOrgs,
+    settingsSuggestionData: state.socketReducer.settingsSuggestionData,
+
   };
 }
 

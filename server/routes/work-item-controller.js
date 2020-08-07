@@ -1,5 +1,7 @@
 const WorkItemTracker = require('../models/work-item-tracker')
 let workItemsAPI = require('../database/database-apis/work-items-api');
+let usersAPI = require('../database/database-apis/users-api');
+
 
 let workItemTracker = new WorkItemTracker();
 
@@ -38,6 +40,7 @@ function changeWorkItemStatus(socket, user) {
   socket.on('changeStatus', async changeStatusData => {
     // console.log('changeStatusData', changeStatusData);
     let updatedParent = await workItemsAPI.changeWorkItemStatus(user, changeStatusData);
+    let result = await usersAPI.accountForWorkItemStatusChange(user, changeStatusData);
     socket.emit('changeStatus', updatedParent.value);
   });
 }
@@ -51,24 +54,6 @@ function deleteWorkItem(socket, user) {
 }
 
 
-
-
-// function sendMessage(socket, user) {
-//   socket.on('sendMessage', async messageInfo => {
-//     if (messageInfo.conversationId) {
-//       // this shouldn't be called every time
-//       socket.join(messageInfo.conversationId);
-//       let sentMessage = await messageTracker.sendMessage(user.email,messageInfo.conversationId, messageInfo.message);
-//       let messages = await messageTracker.getMessages(messageInfo.conversationId);
-//       socket.emit('getMessages', messages);
-//       // emit for all other sockets
-//       socket.to(messageInfo.conversationId).emit('getMessages', messages);
-//     }
-//   })
-// }
-
-
-
 module.exports = {
   getWorkItem: getWorkItem,
   addWorkLane: addWorkLane,
@@ -76,5 +61,6 @@ module.exports = {
   changeWorkItemStatus: changeWorkItemStatus,
   deleteWorkItem: deleteWorkItem,
   getInitialWorkItem: getInitialWorkItem,
+  
 }
 

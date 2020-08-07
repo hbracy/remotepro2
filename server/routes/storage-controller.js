@@ -1,7 +1,22 @@
-const StorageTracker = require('../models/storage-tracker')
 
-function storageController(router, storage) {
-  let storageTracker = new StorageTracker(storage);
+function saveFile(socket, storageTracker, user) {
+  socket.on('saveFile', async fileData => {
+    console.log('saveFile', fileData);
+    let bucket = fileData.fileTitle.split('/')[0];
+    fileData.fileTitle = fileData.fileTitle.replace(bucket + '/', '');
+    console.log(bucket);
+    let success = await storageTracker.saveFile(user, bucket, fileData);
+    console.log('IS SUCCESS?',success)
+    socket.emit('saveFile', success);
+  });
+}
+
+
+function storageController(router, storageTracker) {
+
+
+
+
 
   // const sessionsTracker = new SessionsTrackerModule();
 
@@ -14,6 +29,7 @@ function storageController(router, storage) {
   // respond with "hello world" when a GET request is made to the homepage
   router.get('/:bucket/:pathname*', async (req, res) => {
     // console.log(req.params)
+    console.log('THIS IS THE BUCKET', req.params.bucket);
     let pathname
     if (req.params['0']) {
       pathname = req.params.pathname + req.params['0'];
@@ -39,5 +55,6 @@ function storageController(router, storage) {
 }
 module.exports = {
   storageController: storageController,
+  saveFile: saveFile
   // userTracker: userTracker
 };

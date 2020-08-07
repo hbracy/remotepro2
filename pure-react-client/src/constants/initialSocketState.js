@@ -2,12 +2,8 @@ export const initialSocketState = {
   socketConnection: '',
   gettingContacts: false,
   gettingContactsError: null,
-  contacts: [],
+  conversations: [],
   messages: [],
-  gettingFiles: false,
-  files: [],
-  fileData: null,
-  currentFilePath: '',
   gettingDriveFiles: false,
   gettingWork: false,
   currentWorkItem: null,
@@ -24,6 +20,11 @@ export const initialSocketState = {
   changingEvent: false,
   loginToken: localStorage.getItem('jwtToken'),
   username: '',
-  socketAuthorized: false
+  socketAuthorized: false,
+  gettingUserOrgs: false,
+  userOrgs: [],
+  settingsSuggestionData: null,
+  gettingSearchAddToGroup: false,
+  savingFile: false,
 
 }

@@ -18,6 +18,7 @@ let deviceHeight = Dimensions.get('window').height;
 
   --base4: #000000;
   --base5: #d1ccc7;
+  --base6: #0084ff;
   --white: #ffffff;
   --darkRed: #66154b;
 
@@ -84,6 +85,9 @@ let deviceHeight = Dimensions.get('window').height;
 }
 .base5 {
   background-color: var(--base5);
+}
+.base6 {
+  background-color: var(--base6);
 }
 .white {
   background-color: var(--white);
@@ -205,6 +209,14 @@ zIndex6 {
 
 .flexColumn {
   flex-direction: column;
+}
+
+.rowReverse {
+  flex-direction: row-reverse;
+}
+
+.marginRight {
+  justify-content: flex-end;
 }
 
 /*alwaysBiggerThanChildren {
@@ -468,6 +480,12 @@ darkRed {
 .eightyPercentMaxHeight {
   max-height: 80%;
 }
+
+.eightyPercentMaxWidth {
+  max-width: 80%;
+}
+
+
 .fullMaxHeight {
   max-height: 100%;
 }
@@ -484,6 +502,10 @@ darkRed {
 }
 */
 
+.columnReverse {
+  flex-direction: column-reverse
+}
+
 .spaceAround {
   justify-content: space-around;
 }
@@ -496,6 +518,9 @@ darkRed {
 
 }
 
+.thirtyPercentMinHeight {
+  min-height: 50%;
+}
 
 .leftPadding {
   padding-left: var(--standardMargin);
@@ -517,6 +542,13 @@ darkRed {
   margin-left: var(--standardMargin);
 }
 
+.slightAllAroundMargin {
+  margin-top: calc(var(--standardMargin) / 4);
+  margin-bottom: calc(var(--standardMargin) / 4);
+  margin-right: calc(var(--standardMargin) / 4);
+  margin-left: calc(var(--standardMargin) / 4);
+}
+
 
 /*.allAroundMargin {
   margin-top: 10;
@@ -529,6 +561,11 @@ darkRed {
   margin-top: var(--standardMargin);
   margin-right: var(--standardMargin);
   margin-left: var(--standardMargin);
+}
+
+.wrapWords {
+  overflow-wrap: anywhere; /* Firefox */ 
+  word-break: break-word; /* Chrome, Safari */
 }
 
 .bottomBorder {
@@ -555,6 +592,11 @@ darkRed {
 
 .opaque {
   background: rgba(0, 0, 0, 0.5);
+}
+
+
+.opaqueText {
+  color: rgba(0, 0, 0, 0.5);
 }
 .solid {
   opacity: 1;
@@ -630,6 +672,9 @@ textarea:focus {
   overflow: overlay;
 }
 
+.zeroZIndex {
+  z-index: 0;
+}
 
 .wrap{
   flex-wrap: wrap;
@@ -659,6 +704,9 @@ resizeModeCover {
   display: block;
 }
 
+.bottom {
+  bottom: 0;
+}
 
 
 .autoOverflow {
@@ -694,6 +742,8 @@ overflow-y: auto;
 .offsetFromTop {
   top: -100
 }
+
+
 
 .flexWrap {
 /*   flexShrink: 1;
@@ -731,7 +781,11 @@ overflow-y: auto;
   border: 1px solid gray;
 }
 
+.noBorderColor {
+  border-color: transparent;
+  border: 0px solid transparent;
 
+}
 
 /*.memeStyle {
   fontFamily: 'MemeFont';

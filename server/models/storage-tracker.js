@@ -10,6 +10,45 @@ const validateToken = require('../tools').validateToken;
 
 function StorageTracker(storage) {
 
+  this.saveFile = async function saveFile(user, bucketName, fileData) {
+    let bucket = storage.bucket(bucketName);
+    const file = bucket.file(fileData.fileTitle);
+    try {
+      await file.save(fileData.fileText);
+      return true
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  }
+
+
+
+
+  // this.generateUrlToUploadFile = async function generateUrlToCreateFile(bucket, filename) {
+  //   let nowDate = new Date();
+  //   const config = {
+  //     version: 'v4',
+  //     action: 'read',
+  //     expires: nowDate.getTime() + (15 * 60 * 1000), // 15 minutes
+
+  //   };
+  //   try {
+  //     let signedUrl = await storage.bucket(bucket).file(filename).getSignedUrl(config);
+  //     console.log('SIGNED URL', signedUrl);
+
+  //     // signedUrl = signedUrl[0].replace('https://storage.googleapis.com', 'https://storage.cloud.googleapis.com') // bug in node js google client
+
+  //     return signedUrl[0];
+  //   } catch(err) {
+  //     console.error(err);
+  //   }
+
+  // }
+
+
+
+
   this.generateUrlToUploadFile = async function generateUrlToUploadFile(bucket, filename) {
     let nowDate = new Date();
     const config = {

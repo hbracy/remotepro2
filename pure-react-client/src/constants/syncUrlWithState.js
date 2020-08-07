@@ -14,8 +14,8 @@ export const setupParams = {
 
     },
     currentFilePath: {
-      stateKey: 'socketReducer.currentFilePath',
-      initialState: initialSocketState.currentFilePath,
+      stateKey: 'modalReducer.currentFilePath',
+      initialState: initialModalState.currentFilePath,
       options: { shouldPush: true}
     },
     goToWork: {
@@ -37,6 +37,14 @@ export const setupParams = {
       type: 'bool',
       options: { shouldPush: true}
     },
+
+    goToFileViewer: {
+      stateKey: 'modalReducer.goToFileViewer',
+      initialState: initialModalState.goToFileViewer,
+      type: 'bool',
+      options: { shouldPush: true}
+    },
+
     goToCalendar: {
       stateKey: 'modalReducer.goToCalendar',
       initialState: initialModalState.goToCalendar,
