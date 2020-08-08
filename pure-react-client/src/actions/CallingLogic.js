@@ -20,7 +20,7 @@ export default function setupCall(socket, peer, isInitiator) {
 			config: { iceServers: res.ice_servers },
       // config: { iceServers: [] },
       trickle: true,
-      allowHalfTrickle: true,
+      // allowHalfTrickle: true,
 
       // offerConstraints: { 
       //   offerToReceiveAudio: isInitiator, 
@@ -32,7 +32,7 @@ export default function setupCall(socket, peer, isInitiator) {
       //   offerToReceiveVideo: isInitiator 
       // },
       // stream: mediaStream,
-      objectMode: true,
+      // objectMode: true,
       wrtc: wrtc
 		});
 
