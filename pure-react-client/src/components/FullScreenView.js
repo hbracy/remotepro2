@@ -101,9 +101,8 @@ function FullScreenView(props) {
         </Container>
         <Container>
           { props.settingsSuggestionData && <SettingSuggestionModal listData={props.settingsSuggestionData} className={'relativePosition'} /> }
-        </Container>
-        <Container>
-          {
+          
+                    {
             !props.loginToken && props.loginSignupModalIsActive && <LoginSignupModal className={'container1 relativePosition'} />
           }
           {
@@ -115,6 +114,9 @@ function FullScreenView(props) {
           {
             props.loginToken && props.settingModalIsActive && <SettingModal className={'container1 relativePosition'} />
           }
+
+        </Container>
+        <Container>
         </Container>
       </Container>
       <Container className={''}>
