@@ -44,7 +44,6 @@ function LandingPage(props) {
             <Container>
               <Container/>
               <Container/>
-              <Container/>
               <Container>
                 {
                   !props.isLoggedIn && props.loginSignupModalIsActive && <LoginSignupModal className={'container1 relativePosition'} />
@@ -56,6 +55,7 @@ function LandingPage(props) {
                   !props.isLoggedIn && props.signupModalIsActive && <SignupModal className={'container1 relativePosition'} />
                 }
               </Container>
+              <Container/>
             </Container>
             <Container>
               <Container/>
