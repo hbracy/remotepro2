@@ -19,7 +19,7 @@ export default function setupCall(socket, peer, isInitiator) {
 			initiator: isInitiator,
 			config: { iceServers: res.ice_servers },
       // config: { iceServers: [] },
-      trickle: false,
+      trickle: true,
       allowHalfTrickle: true,
 
       // offerConstraints: { 
